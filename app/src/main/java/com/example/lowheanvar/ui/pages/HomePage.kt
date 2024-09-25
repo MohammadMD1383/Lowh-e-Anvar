@@ -1,6 +1,7 @@
 package com.example.lowheanvar.ui.pages
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,27 +24,32 @@ import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material3.Card
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
+import androidx.compose.ui.window.PopupProperties
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.lowheanvar.ContentManager
@@ -55,12 +61,14 @@ import com.example.lowheanvar.ui.theme.LowheAnvarTheme
 import com.example.lowheanvar.ui.theme.Typography
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun HomePage(navController: NavHostController) {
 	val scope = rememberCoroutineScope()
 	var searchTerm by remember { mutableStateOf("") }
 	var popupShown by remember { mutableStateOf(false) }
+	var scale by remember { mutableStateOf(false) }
+	val scaleFactor by animateFloatAsState(if (scale) 1f else 0f, finishedListener = { if (it == 0f) popupShown = false })
 	val newFolderDialog = remember { NewFolderDialog() }
 	
 	BackHandler(ContentManager.canPopStack) {
@@ -82,29 +90,42 @@ fun HomePage(navController: NavHostController) {
 		},
 		floatingActionButton = {
 			FloatingActionButton(onClick = {
-				popupShown = !popupShown
+				if (popupShown) scale = false else popupShown = true
 			}) {
 				Icon(Icons.Rounded.Add, null)
 				
-				if (popupShown) Popup(alignment = Alignment.TopCenter, offset = IntOffset(0, -260)) {
-					Column {
-						FilledIconButton(onClick = {
-							popupShown = false
-							navController.navigateSingleTop("content")
-						}) {
+				if (popupShown) Popup(
+					alignment = Alignment.BottomCenter,
+					offset = IntOffset(0, -LocalDensity.current.run { (56 + 24).dp.roundToPx() }),
+					properties = PopupProperties(clippingEnabled = false, usePlatformDefaultWidth = false),
+				) {
+					LaunchedEffect(Unit) {
+						scale = true
+					}
+					Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+						SmallFloatingActionButton(
+							onClick = {
+								scale = false
+								navController.navigateSingleTop("content")
+							},
+							modifier = Modifier.scale(scaleFactor)
+						) {
 							Icon(Icons.Rounded.Description, null)
 						}
 						
-						FilledIconButton(onClick = {
-							popupShown = false
-							
-							scope.launch {
-								val result = newFolderDialog.show()
-								if (result is DialogResult.Create) {
-									ContentManager.createFolder(result.name)
+						SmallFloatingActionButton(
+							onClick = {
+								scale = false
+								
+								scope.launch {
+									val result = newFolderDialog.show()
+									if (result is DialogResult.Create) {
+										ContentManager.createFolder(result.name)
+									}
 								}
-							}
-						}) {
+							},
+							modifier = Modifier.scale(scaleFactor)
+						) {
 							Icon(Icons.Rounded.FolderOpen, null)
 						}
 					}
