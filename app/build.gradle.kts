@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-	namespace = "com.example.lowheanvar"
+	namespace = "ir.mmd.androidDev.lowheanvar"
 	compileSdk = 34
 	
 	defaultConfig {
-		applicationId = "com.example.lowheanvar"
+		applicationId = "ir.mmd.androidDev.lowheanvar"
 		minSdk = 24
 		targetSdk = 34
 		versionCode = 1
