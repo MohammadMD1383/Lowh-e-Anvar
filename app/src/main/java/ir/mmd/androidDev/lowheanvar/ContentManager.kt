@@ -1,7 +1,10 @@
 package ir.mmd.androidDev.lowheanvar
 
 import android.content.Context
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
 import androidx.compose.material.icons.rounded.Home
@@ -13,11 +16,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import ir.mmd.androidDev.lowheanvar.ui.components.rememberReusableComponent
 import java.io.File
 
@@ -46,9 +51,17 @@ class ContentManagerClass(context: Context) {
 		val arrow = rememberReusableComponent { Icon(Icons.AutoMirrored.Rounded.KeyboardArrowRight, null) }
 		val directories = currentPath.split(File.separator).toMutableList().apply { removeFirst() }
 		val last = directories.removeLastOrNull()
+		val scrollState = rememberScrollState()
+		
+		LaunchedEffect(scrollState.maxValue) {
+			scrollState.animateScrollTo(scrollState.maxValue)
+		}
 		
 		Row(
-			verticalAlignment = Alignment.CenterVertically
+			verticalAlignment = Alignment.CenterVertically,
+			modifier = Modifier
+				.fillMaxWidth()
+				.horizontalScroll(scrollState)
 		) {
 			IconButton(
 				enabled = last != null,
