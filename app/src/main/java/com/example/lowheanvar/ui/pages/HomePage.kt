@@ -20,6 +20,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Description
 import androidx.compose.material.icons.rounded.FolderOpen
+import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material3.Card
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -81,7 +82,12 @@ fun HomePage(navController: NavHostController) {
 					IconButton(onClick = {
 						navController.navigateSingleTop("settings")
 					}) {
-						Icon(Icons.Rounded.Settings, "")
+						Icon(Icons.Rounded.Settings, null)
+					}
+				},
+				actions = {
+					IconButton(onClick = {}) {
+						Icon(Icons.Rounded.Search, null)
 					}
 				}
 			)
