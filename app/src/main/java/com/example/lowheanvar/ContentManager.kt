@@ -153,6 +153,11 @@ class ContentManagerClass(context: Context) {
 		notes.remove(note)
 	}
 	
+	fun deleteFolder(folder: Folder) {
+		folder.file.deleteRecursively()
+		folders.remove(folder)
+	}
+	
 	fun popStack(): Boolean {
 		if (canPopStack) {
 			currentDir = currentDir.parentFile!!
@@ -162,6 +167,15 @@ class ContentManagerClass(context: Context) {
 		}
 		
 		return false
+	}
+	
+	fun batchDelete(folderPaths: Set<String>, notePaths: Set<String>) {
+		folders.filter { it.file.path in folderPaths }.forEach {
+			deleteFolder(it)
+		}
+		notes.filter { it.file.path in notePaths }.forEach {
+			deleteNote(it)
+		}
 	}
 }
 
