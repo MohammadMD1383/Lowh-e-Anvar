@@ -15,9 +15,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import com.example.lowheanvar.R
 import com.example.lowheanvar.ui.theme.Typography
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
@@ -86,7 +88,7 @@ class ConfirmDialog {
 							},
 							modifier = Modifier.weight(1f)
 						) {
-							Text("Cancel")
+							Text(stringResource(R.string.btn_cancel))
 						}
 						
 						TextButton(
@@ -97,7 +99,7 @@ class ConfirmDialog {
 							},
 							modifier = Modifier.weight(1f)
 						) {
-							Text("Ok")
+							Text(stringResource(R.string.btn_ok))
 						}
 					}
 				}

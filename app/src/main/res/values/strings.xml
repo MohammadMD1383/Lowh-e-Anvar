@@ -1,3 +1,21 @@
 <resources>
 	<string name="app_name">Lowh-e-Anvar</string>
+	<string name="btn_cancel">Cancel</string>
+	<string name="btn_ok">OK</string>
+	<string name="title_new_folder">New Folder</string>
+	<string name="txt_enter_folder_name">Enter Folder Name</string>
+	<string name="btn_create">Create</string>
+	<string name="txt_start_typing_here">Start typing here ...</string>
+	<string name="txt_edit_note">Edit Note</string>
+	<string name="txt_new_note">New Note</string>
+	<string name="txt_title_cannot_be_blank">Title cannot be blank!</string>
+	<string name="txt_title">Title</string>
+	<string name="txt_folders">Folders</string>
+	<string name="txt_notes">Notes</string>
+	<string name="comma">,</string>
+	<string name="txt_confirm_delete">Confirm Delete</string>
+	<string name="txt_sure_to_delete">Are you sure to delete these items?</string>
+	<string name="txt_view_note">View Note</string>
+	<string name="txt_edit">Edit</string>
+	<string name="txt_delete">Delete</string>
 </resources>

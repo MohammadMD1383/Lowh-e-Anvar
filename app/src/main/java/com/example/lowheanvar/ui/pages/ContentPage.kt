@@ -22,8 +22,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import com.example.lowheanvar.ContentManager
+import com.example.lowheanvar.R
 import com.example.lowheanvar.ui.components.RichEditor
 import com.example.lowheanvar.ui.theme.Typography
 
@@ -37,7 +39,7 @@ fun ContentPage(navController: NavController) {
 	Scaffold(
 		topBar = {
 			CenterAlignedTopAppBar(
-				title = { Text(if (ContentManager.editNote) "Edit Note" else "New Note") },
+				title = { Text(if (ContentManager.editNote) stringResource(R.string.txt_edit_note) else stringResource(R.string.txt_new_note)) },
 				navigationIcon = {
 					IconButton(onClick = {
 						navController.popBackStack()
@@ -76,8 +78,8 @@ fun ContentPage(navController: NavController) {
 				value = title,
 				isError = titleHasError,
 				onValueChange = { title = it; titleHasError = false },
-				supportingText = { if (titleHasError) Text("Title cannot be blank!") },
-				placeholder = { Text("Title", style = Typography.headlineMedium) },
+				supportingText = { if (titleHasError) Text(stringResource(R.string.txt_title_cannot_be_blank)) },
+				placeholder = { Text(stringResource(R.string.txt_title), style = Typography.headlineMedium) },
 				modifier = Modifier.fillMaxWidth(),
 				singleLine = true,
 				colors = OutlinedTextFieldDefaults.colors(

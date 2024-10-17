@@ -52,7 +52,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -63,6 +65,7 @@ import androidx.compose.ui.window.PopupProperties
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.lowheanvar.ContentManager
+import com.example.lowheanvar.R
 import com.example.lowheanvar.navigateSingleTop
 import com.example.lowheanvar.ui.components.ConfirmDialog
 import com.example.lowheanvar.ui.components.ConfirmDialog.ConfirmResult
@@ -87,6 +90,7 @@ fun HomePage(navController: NavHostController) {
 	val scaleFactor by animateFloatAsState(if (scale) 1f else 0f, finishedListener = { if (it == 0f) popupShown = false })
 	val newFolderDialog = remember { NewFolderDialog() }
 	val confirmDialog = remember { ConfirmDialog() }
+	val context = LocalContext.current
 	
 	LaunchedEffect(folderSelectCount, noteSelectCount) {
 		if (folderSelectCount == 0 && noteSelectCount == 0) {
@@ -112,9 +116,9 @@ fun HomePage(navController: NavHostController) {
 			TopAppBar(
 				title = {
 					if (selectMode) {
-						val folderText = if (folderSelectCount > 0) "$folderSelectCount Folders" else ""
-						val noteText = if (noteSelectCount > 0) "$noteSelectCount Notes" else ""
-						val separator = if (folderText.isNotEmpty() && noteText.isNotEmpty()) ", " else ""
+						val folderText = if (folderSelectCount > 0) "$folderSelectCount ${stringResource(R.string.txt_folders)}" else ""
+						val noteText = if (noteSelectCount > 0) "$noteSelectCount ${stringResource(R.string.txt_notes)}" else ""
+						val separator = if (folderText.isNotEmpty() && noteText.isNotEmpty()) "${stringResource(R.string.comma)} " else ""
 						Text("$folderText$separator$noteText")
 					}
 				},
@@ -140,8 +144,8 @@ fun HomePage(navController: NavHostController) {
 						IconButton(onClick = {
 							scope.launch {
 								val result = confirmDialog.show(
-									"Confirm Delete",
-									"Are you sure to delete these items?"
+									context.getString(R.string.txt_confirm_delete),
+									context.getString(R.string.txt_sure_to_delete)
 								)
 								
 								if (result is ConfirmResult.Ok) {

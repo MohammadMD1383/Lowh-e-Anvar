@@ -21,9 +21,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.lowheanvar.ContentManager
+import com.example.lowheanvar.R
 import com.example.lowheanvar.navigateSingleTop
 import com.example.lowheanvar.ui.components.HtmlViewer
 import com.example.lowheanvar.ui.theme.Typography
@@ -36,7 +38,7 @@ fun NoteViewPage(navController: NavController) {
 	Scaffold(
 		topBar = {
 			CenterAlignedTopAppBar(
-				title = { Text("View Note") },
+				title = { Text(stringResource(R.string.txt_view_note)) },
 				navigationIcon = {
 					IconButton(
 						onClick = {
@@ -55,7 +57,7 @@ fun NoteViewPage(navController: NavController) {
 							onDismissRequest = { dropdownShown = false }
 						) {
 							DropdownMenuItem(
-								text = { Text("Edit") },
+								text = { Text(stringResource(R.string.txt_edit)) },
 								onClick = {
 									dropdownShown = false
 									ContentManager.editNote = true
@@ -64,7 +66,7 @@ fun NoteViewPage(navController: NavController) {
 							)
 							
 							DropdownMenuItem(
-								text = { Text("Delete") },
+								text = { Text(stringResource(R.string.txt_delete)) },
 								onClick = {
 									dropdownShown = false
 									ContentManager.deleteNote(ContentManager.openNote!!)

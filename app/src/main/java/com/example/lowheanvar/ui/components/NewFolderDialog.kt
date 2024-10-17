@@ -16,9 +16,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import com.example.lowheanvar.R
 import com.example.lowheanvar.ui.theme.Typography
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
@@ -63,7 +65,7 @@ class NewFolderDialog {
 					modifier = Modifier.padding(16.dp)
 				) {
 					Text(
-						text = "New Folder",
+						text = stringResource(R.string.title_new_folder),
 						style = Typography.headlineSmall,
 						textAlign = TextAlign.Center,
 						modifier = Modifier.fillMaxWidth()
@@ -74,7 +76,7 @@ class NewFolderDialog {
 					OutlinedTextField(
 						value = newFolderName,
 						onValueChange = { newFolderName = it },
-						placeholder = { Text("Enter Folder Name") },
+						placeholder = { Text(stringResource(R.string.txt_enter_folder_name)) },
 						modifier = Modifier.fillMaxWidth()
 					)
 					
@@ -89,7 +91,7 @@ class NewFolderDialog {
 							},
 							modifier = Modifier.weight(1f)
 						) {
-							Text("Cancel")
+							Text(stringResource(R.string.btn_cancel))
 						}
 						
 						TextButton(
@@ -101,7 +103,7 @@ class NewFolderDialog {
 							},
 							modifier = Modifier.weight(1f)
 						) {
-							Text("Create")
+							Text(stringResource(R.string.btn_create))
 						}
 					}
 				}

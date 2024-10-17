@@ -38,6 +38,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.example.lowheanvar.Notifier
+import com.example.lowheanvar.R
 import com.example.lowheanvar.ui.theme.Typography
 import jp.wasabeef.richeditor.RichEditor
 
@@ -77,7 +78,7 @@ fun RichEditor(
 		AndroidView(
 			factory = { context ->
 				AppRichEditor(context).apply {
-					setPlaceholder("Start typing here ...")
+					setPlaceholder(context.getString(R.string.txt_start_typing_here))
 					setEditorBackgroundColor(backgroundColor)
 					setEditorFontColor(fontColor)
 					setEditorFontSize(fontSize)

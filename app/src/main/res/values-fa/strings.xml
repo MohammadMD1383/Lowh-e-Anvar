@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">لوح انوار</string>
+	<string name="btn_cancel">لغو</string>
+	<string name="btn_ok">تایید</string>
+	<string name="title_new_folder">پوشه جدید</string>
+	<string name="txt_enter_folder_name">نام پوشه را وارد کنید</string>
+	<string name="btn_create">تایید</string>
+	<string name="txt_start_typing_here">اینجا شروع به نوشتن کنید ...</string>
+	<string name="txt_edit_note">ویرایش نوشته</string>
+	<string name="txt_new_note">نوشته جدید</string>
+	<string name="txt_title_cannot_be_blank">عنوان نباید خالی باشد!</string>
+	<string name="txt_title">عنوان</string>
+	<string name="txt_folders">پوشه</string>
+	<string name="txt_notes">نوشته</string>
+	<string name="comma">،</string>
+	<string name="txt_confirm_delete">هشدار!</string>
+	<string name="txt_sure_to_delete">آیا از حذف کردن این موارد اطمینان دارید؟</string>
+	<string name="txt_view_note">مشاهده نوشته</string>
+	<string name="txt_edit">ویرایش</string>
+	<string name="txt_delete">حذف</string>
+</resources>
