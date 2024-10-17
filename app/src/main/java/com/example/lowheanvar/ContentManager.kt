@@ -1,17 +1,32 @@
 package com.example.lowheanvar
 
 import android.content.Context
+import androidx.compose.foundation.layout.Row
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
+import androidx.compose.material.icons.rounded.Home
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import com.example.lowheanvar.ui.components.rememberReusableComponent
 import java.io.File
 
 lateinit var ContentManager: ContentManagerClass
 
-class ContentManagerClass(private val context: Context) {
+class ContentManagerClass(context: Context) {
 	private val contentRoot = context.filesDir.resolve("content-root")
 	private var currentDir = contentRoot
+	private var currentPath by mutableStateOf("")
 	var folders = mutableStateListOf<Folder>()
 	var notes = mutableStateListOf<Note>()
 	var openNote by mutableStateOf<Note?>(null)
@@ -26,7 +41,59 @@ class ContentManagerClass(private val context: Context) {
 		update()
 	}
 	
+	@Composable
+	fun BreadCrumb() {
+		val arrow = rememberReusableComponent { Icon(Icons.AutoMirrored.Rounded.KeyboardArrowRight, null) }
+		val directories = currentPath.split(File.separator).toMutableList().apply { removeFirst() }
+		val last = directories.removeLastOrNull()
+		
+		Row(
+			verticalAlignment = Alignment.CenterVertically
+		) {
+			IconButton(
+				enabled = last != null,
+				onClick = { navigateTo(contentRoot) }
+			) {
+				Icon(
+					imageVector = Icons.Rounded.Home,
+					contentDescription = null,
+					tint = if (last == null) MaterialTheme.colorScheme.primary else LocalContentColor.current
+				)
+			}
+			
+			if (last != null) {
+				arrow()
+			}
+			
+			var dirPath = contentRoot.path
+			directories.forEach {
+				dirPath += "${File.separator}$it"
+				val capture = dirPath
+				
+				TextButton(
+					colors = ButtonDefaults.textButtonColors(contentColor = LocalContentColor.current),
+					onClick = { navigateTo(File(capture)) },
+				) {
+					Text(it)
+				}
+				arrow()
+			}
+			
+			if (last != null) {
+				TextButton(
+					colors = ButtonDefaults.textButtonColors(disabledContentColor = ButtonDefaults.textButtonColors().contentColor),
+					onClick = {},
+					enabled = false
+				) {
+					Text(last)
+				}
+			}
+		}
+	}
+	
 	private fun update() {
+		currentPath = currentDir.path.drop(contentRoot.parentFile!!.path.length + 1)
+		
 		folders.clear()
 		notes.clear()
 		
@@ -39,10 +106,14 @@ class ContentManagerClass(private val context: Context) {
 		}
 	}
 	
-	fun navigateTo(folder: Folder) {
-		currentDir = folder.file
+	private fun navigateTo(file: File) {
+		currentDir = file
 		canPopStack = currentDir.path != contentRoot.path
 		update()
+	}
+	
+	fun navigateTo(folder: Folder) {
+		navigateTo(folder.file)
 	}
 	
 	fun createFolder(name: String): Folder {

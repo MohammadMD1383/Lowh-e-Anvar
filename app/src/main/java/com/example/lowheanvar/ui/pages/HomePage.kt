@@ -27,7 +27,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Text
@@ -54,7 +53,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.lowheanvar.ContentManager
 import com.example.lowheanvar.navigateSingleTop
-import com.example.lowheanvar.plus
 import com.example.lowheanvar.ui.components.NewFolderDialog
 import com.example.lowheanvar.ui.components.NewFolderDialog.DialogResult
 import com.example.lowheanvar.ui.theme.LowheAnvarTheme
@@ -133,78 +131,70 @@ fun HomePage(navController: NavHostController) {
 			}
 		}
 	) { contentPadding ->
-		LazyVerticalGrid(
-			columns = GridCells.Adaptive(160.dp),
-			verticalArrangement = Arrangement.spacedBy(8.dp),
-			horizontalArrangement = Arrangement.spacedBy(8.dp),
-			contentPadding = contentPadding + PaddingValues(start = 8.dp, top = 8.dp, end = 8.dp, bottom = 90.dp),
+		Column(
+			modifier = Modifier.padding(contentPadding)
 		) {
-			item(span = { GridItemSpan(2) }) {
-				OutlinedTextField(
-					value = searchTerm,
-					onValueChange = { searchTerm = it },
-					placeholder = {
-						Text(
-							text = "Search ...",
-							modifier = Modifier.fillMaxWidth(),
-							textAlign = TextAlign.Center
-						)
-					},
-					modifier = Modifier.fillMaxWidth()
-				)
-			}
+			ContentManager.BreadCrumb()
 			
-			items(ContentManager.folders) {
-				Card(
-					modifier = Modifier.aspectRatio(1f),
-					onClick = {
-						ContentManager.navigateTo(it)
-					},
-				) {
-					Box(
-						modifier = Modifier
-							.padding(8.dp)
-							.fillMaxSize(),
-						contentAlignment = Alignment.Center
+			LazyVerticalGrid(
+				columns = GridCells.Adaptive(160.dp),
+				verticalArrangement = Arrangement.spacedBy(8.dp),
+				horizontalArrangement = Arrangement.spacedBy(8.dp),
+				contentPadding = PaddingValues(start = 8.dp, top = 8.dp, end = 8.dp, bottom = 90.dp),
+			) {
+				items(ContentManager.folders, contentType = { "Folder" }) {
+					Card(
+						modifier = Modifier.aspectRatio(1f),
+						onClick = {
+							ContentManager.navigateTo(it)
+						},
 					) {
-						Text(
-							text = it.name,
-							style = Typography.headlineMedium,
-							textAlign = TextAlign.Center,
-						)
+						Box(
+							modifier = Modifier
+								.padding(8.dp)
+								.fillMaxSize(),
+							contentAlignment = Alignment.Center
+						) {
+							Text(
+								text = it.name,
+								style = Typography.headlineMedium,
+								textAlign = TextAlign.Center,
+							)
+						}
 					}
 				}
-			}
-			
-			items(
-				items = ContentManager.notes,
-				span = { GridItemSpan(2) }
-			) {
-				Card(
-					onClick = {
-						ContentManager.openNote = it
-						navController.navigateSingleTop("view")
-					},
+				
+				items(
+					items = ContentManager.notes,
+					span = { GridItemSpan(2) },
+					contentType = { "Note" }
 				) {
-					Column(
-						modifier = Modifier
-							.padding(16.dp)
-							.fillMaxWidth(),
+					Card(
+						onClick = {
+							ContentManager.openNote = it
+							navController.navigateSingleTop("view")
+						},
 					) {
-						Text(
-							text = it.title,
-							style = Typography.headlineSmall,
-						)
-						
-						Spacer(Modifier.height(8.dp))
-						
-						Text(
-							text = it.content.replace("<[^>]*>".toRegex(), "").take(100),
-							style = Typography.bodyMedium,
-							maxLines = 1,
-							overflow = TextOverflow.Ellipsis,
-							modifier = Modifier.fillMaxWidth(0.7f)
-						)
+						Column(
+							modifier = Modifier
+								.padding(16.dp)
+								.fillMaxWidth(),
+						) {
+							Text(
+								text = it.title,
+								style = Typography.headlineSmall,
+							)
+							
+							Spacer(Modifier.height(8.dp))
+							
+							Text(
+								text = it.content.replace("<[^>]*>".toRegex(), "").take(100),
+								style = Typography.bodyMedium,
+								maxLines = 1,
+								overflow = TextOverflow.Ellipsis,
+								modifier = Modifier.fillMaxWidth(0.7f)
+							)
+						}
 					}
 				}
 			}
