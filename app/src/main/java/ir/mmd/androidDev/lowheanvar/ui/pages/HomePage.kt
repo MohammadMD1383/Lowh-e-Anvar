@@ -54,6 +54,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -107,8 +108,12 @@ fun HomePage(navController: NavHostController) {
 		}
 	}
 	
-	BackHandler(ContentManager.canPopStack) {
-		ContentManager.popStack()
+	BackHandler(ContentManager.canPopStack || selectMode) {
+		if (selectMode) {
+			selectMode = false
+		} else {
+			ContentManager.popStack()
+		}
 	}
 	
 	Scaffold(
@@ -120,6 +125,11 @@ fun HomePage(navController: NavHostController) {
 						val noteText = if (noteSelectCount > 0) "$noteSelectCount ${stringResource(R.string.txt_notes)}" else ""
 						val separator = if (folderText.isNotEmpty() && noteText.isNotEmpty()) "${stringResource(R.string.comma)} " else ""
 						Text("$folderText$separator$noteText")
+					} else {
+						Box(contentAlignment = Alignment.Center) {
+							Icon(painterResource(R.drawable.lowh_e_anvar_border), null)
+							Icon(painterResource(R.drawable.lowh_e_anvar_text), null)
+						}
 					}
 				},
 				navigationIcon = {
