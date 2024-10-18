@@ -17,6 +17,7 @@ import ir.mmd.androidDev.lowheanvar.ui.pages.ContentPage
 import ir.mmd.androidDev.lowheanvar.ui.pages.HomePage
 import ir.mmd.androidDev.lowheanvar.ui.pages.NoteViewPage
 import ir.mmd.androidDev.lowheanvar.ui.pages.SettingsPage
+import ir.mmd.androidDev.lowheanvar.ui.pages.ThemePage
 import ir.mmd.androidDev.lowheanvar.ui.theme.LowheAnvarTheme
 
 class MainActivity : ComponentActivity() {
@@ -37,7 +38,7 @@ private fun MainComponent() {
 	
 	NavHost(
 		navController = navController,
-		startDestination = "home",
+		startDestination = "theme",
 	) {
 		composable(
 			route = "home",
@@ -84,6 +85,8 @@ private fun MainComponent() {
 		) { ContentPage(navController) }
 		
 		composable(route = "view") { NoteViewPage(navController) }
+		
+		composable(route = "theme") { ThemePage(navController) }
 	}
 }
 

@@ -20,6 +20,8 @@ fun LowheAnvarTheme(
 	content: @Composable () -> Unit
 ) {
 	val colorScheme = when {
+		CustomTheme.useCustomTheme -> CustomTheme.colorScheme
+		
 		dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
 			val context = LocalContext.current
 			if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)

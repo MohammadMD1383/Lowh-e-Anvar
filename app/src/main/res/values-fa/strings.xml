@@ -19,4 +19,7 @@
 	<string name="txt_view_note">مشاهده نوشته</string>
 	<string name="txt_edit">ویرایش</string>
 	<string name="txt_delete">حذف</string>
+	<string name="txt_settings">تنظیمات</string>
+	<string name="txt_theme">تم</string>
+	<string name="txt_pick_a_color">انتخاب رنگ</string>
 </resources>
