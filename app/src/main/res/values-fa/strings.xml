@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="app_name">لوح انوار</string>
+	<string name="app_name">دفتر اشعار</string>
 	<string name="btn_cancel">لغو</string>
 	<string name="btn_ok">تایید</string>
 	<string name="title_new_folder">پوشه جدید</string>
