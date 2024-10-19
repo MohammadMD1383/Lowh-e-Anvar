@@ -24,4 +24,7 @@
 	<string name="txt_custom_theme">Custom theme</string>
 	<string name="txt_header_border">Typography border color</string>
 	<string name="txt_header_text">Typography text color</string>
+	<string name="txt_folder_name_empty">Folder name can\'t be empty</string>
+	<string name="txt_folder_name_slash_character">Folder name can\'t contain \'/\' character</string>
+	<string name="txt_duplicate_folder_name">Folder with this name already exists</string>
 </resources>

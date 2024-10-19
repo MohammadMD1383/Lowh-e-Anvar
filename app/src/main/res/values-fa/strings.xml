@@ -25,4 +25,7 @@
 	<string name="txt_custom_theme">شخصی سازی تم</string>
 	<string name="txt_header_border">رنگ کادر تایپوگرافی</string>
 	<string name="txt_header_text">رنگ تایپوگرافی</string>
+	<string name="txt_folder_name_empty">اسم پوشه نمی‌تواند خالی باشد</string>
+	<string name="txt_folder_name_slash_character">اسم پوشه نمی‌تواند شامل کاراکتر \'/\' باشد</string>
+	<string name="txt_duplicate_folder_name">پوشه دیگری با همین نام وجود دارد</string>
 </resources>
