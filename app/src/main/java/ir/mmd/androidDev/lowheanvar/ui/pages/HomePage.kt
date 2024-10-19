@@ -23,6 +23,7 @@ import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.DeleteOutline
 import androidx.compose.material.icons.rounded.Description
+import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material.icons.rounded.FolderOpen
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.Settings
@@ -161,6 +162,12 @@ fun HomePage(navController: NavHostController) {
 							Icon(Icons.Rounded.Search, null)
 						}
 					} else {
+						if (folderSelectCount + noteSelectCount == 1) {
+							IconButton(onClick = {}) {
+								Icon(Icons.Rounded.Edit, null)
+							}
+						}
+						
 						IconButton(onClick = {
 							scope.launch {
 								val result = confirmDialog.show(
