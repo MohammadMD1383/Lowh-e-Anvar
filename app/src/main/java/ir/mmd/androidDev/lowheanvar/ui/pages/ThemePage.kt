@@ -11,8 +11,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
+import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -24,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -44,6 +45,7 @@ import kotlin.reflect.full.memberProperties
 fun ThemePage(navController: NavHostController) {
 	val scope = rememberCoroutineScope()
 	val colorPickerDialog = ColorPickerDialog()
+	val context = LocalContext.current
 	
 	Scaffold(
 		topBar = {
@@ -53,26 +55,19 @@ fun ThemePage(navController: NavHostController) {
 					IconButton(onClick = { navController.popBackStack() }) {
 						Icon(Icons.AutoMirrored.Rounded.ArrowBack, null)
 					}
+				},
+				actions = {
+					IconButton(onClick = {
+						CustomTheme.save(context)
+						navController.popBackStack()
+					}) {
+						Icon(Icons.Rounded.Check, null)
+					}
 				}
 			)
 		}
 	) { contentPadding ->
 		LazyColumn(modifier = Modifier.padding(contentPadding)) {
-			item {
-				Row(
-					verticalAlignment = Alignment.CenterVertically,
-					modifier = Modifier
-						.clickable { CustomTheme.useCustomTheme = !CustomTheme.useCustomTheme }
-						.padding(horizontal = 16.dp, vertical = 24.dp)
-				) {
-					Text("Use custom theme", modifier = Modifier.weight(1f))
-					Checkbox(
-						checked = CustomTheme.useCustomTheme,
-						onCheckedChange = null,
-					)
-				}
-			}
-			
 			items(CustomTheme::class.memberProperties.filter { it.annotations.any { a -> a is ThemeVariable } }) {
 				val color = it.get(CustomTheme) as Color
 				Row(

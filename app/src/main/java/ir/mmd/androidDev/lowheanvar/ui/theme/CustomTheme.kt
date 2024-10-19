@@ -1,16 +1,24 @@
 package ir.mmd.androidDev.lowheanvar.ui.theme
 
+import android.content.Context
 import androidx.compose.material3.ColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
+import org.json.JSONObject
 
 annotation class ThemeVariable
 
 data object CustomTheme {
 	var useCustomTheme by mutableStateOf(false)
+	
+	@ThemeVariable
+	var headerBorder by mutableStateOf(Color(0xFFFFFF00))
+	
+	@ThemeVariable
+	var headerText by mutableStateOf(Color(0xFFFFFFFF))
 	
 	@ThemeVariable
 	var primary by mutableStateOf(Color(0xFF6750A4))
@@ -160,4 +168,96 @@ data object CustomTheme {
 			surfaceContainerHigh = surfaceContainerHigh,
 			surfaceContainerHighest = surfaceContainerHighest,
 		)
+	
+	fun save(context: Context) {
+		context.filesDir.resolve("CustomTheme.json").writeText(
+			JSONObject().apply {
+				put("useCustomTheme", useCustomTheme)
+				put("headerBorder", headerBorder.value.toLong())
+				put("headerText", headerText.value.toLong())
+				put("primary", primary.value.toLong())
+				put("onPrimary", onPrimary.value.toLong())
+				put("primaryContainer", primaryContainer.value.toLong())
+				put("onPrimaryContainer", onPrimaryContainer.value.toLong())
+				put("inversePrimary", inversePrimary.value.toLong())
+				put("secondary", secondary.value.toLong())
+				put("onSecondary", onSecondary.value.toLong())
+				put("secondaryContainer", secondaryContainer.value.toLong())
+				put("onSecondaryContainer", onSecondaryContainer.value.toLong())
+				put("tertiary", tertiary.value.toLong())
+				put("onTertiary", onTertiary.value.toLong())
+				put("tertiaryContainer", tertiaryContainer.value.toLong())
+				put("onTertiaryContainer", onTertiaryContainer.value.toLong())
+				put("error", error.value.toLong())
+				put("onError", onError.value.toLong())
+				put("errorContainer", errorContainer.value.toLong())
+				put("onErrorContainer", onErrorContainer.value.toLong())
+				put("background", background.value.toLong())
+				put("onBackground", onBackground.value.toLong())
+				put("surface", surface.value.toLong())
+				put("onSurface", onSurface.value.toLong())
+				put("surfaceVariant", surfaceVariant.value.toLong())
+				put("onSurfaceVariant", onSurfaceVariant.value.toLong())
+				put("outline", outline.value.toLong())
+				put("inverseOnSurface", inverseOnSurface.value.toLong())
+				put("inverseSurface", inverseSurface.value.toLong())
+				put("surfaceTint", surfaceTint.value.toLong())
+				put("outlineVariant", outlineVariant.value.toLong())
+				put("scrim", scrim.value.toLong())
+				put("surfaceBright", surfaceBright.value.toLong())
+				put("surfaceDim", surfaceDim.value.toLong())
+				put("surfaceContainer", surfaceContainer.value.toLong())
+				put("surfaceContainerLowest", surfaceContainerLowest.value.toLong())
+				put("surfaceContainerLow", surfaceContainerLow.value.toLong())
+				put("surfaceContainerHigh", surfaceContainerHigh.value.toLong())
+				put("surfaceContainerHighest", surfaceContainerHighest.value.toLong())
+			}.toString(2)
+		)
+	}
+	
+	fun load(context: Context) {
+		context.filesDir.resolve("CustomTheme.json").takeIf { it.exists() }?.run {
+			JSONObject(readText()).also {
+				useCustomTheme = it.getBoolean("useCustomTheme")
+				headerBorder = Color(it.getLong("headerBorder").toULong())
+				headerText = Color(it.getLong("headerText").toULong())
+				primary = Color(it.getLong("primary").toULong())
+				onPrimary = Color(it.getLong("onPrimary").toULong())
+				primaryContainer = Color(it.getLong("primaryContainer").toULong())
+				onPrimaryContainer = Color(it.getLong("onPrimaryContainer").toULong())
+				inversePrimary = Color(it.getLong("inversePrimary").toULong())
+				secondary = Color(it.getLong("secondary").toULong())
+				onSecondary = Color(it.getLong("onSecondary").toULong())
+				secondaryContainer = Color(it.getLong("secondaryContainer").toULong())
+				onSecondaryContainer = Color(it.getLong("onSecondaryContainer").toULong())
+				tertiary = Color(it.getLong("tertiary").toULong())
+				onTertiary = Color(it.getLong("onTertiary").toULong())
+				tertiaryContainer = Color(it.getLong("tertiaryContainer").toULong())
+				onTertiaryContainer = Color(it.getLong("onTertiaryContainer").toULong())
+				error = Color(it.getLong("error").toULong())
+				onError = Color(it.getLong("onError").toULong())
+				errorContainer = Color(it.getLong("errorContainer").toULong())
+				onErrorContainer = Color(it.getLong("onErrorContainer").toULong())
+				background = Color(it.getLong("background").toULong())
+				onBackground = Color(it.getLong("onBackground").toULong())
+				surface = Color(it.getLong("surface").toULong())
+				onSurface = Color(it.getLong("onSurface").toULong())
+				surfaceVariant = Color(it.getLong("surfaceVariant").toULong())
+				onSurfaceVariant = Color(it.getLong("onSurfaceVariant").toULong())
+				outline = Color(it.getLong("outline").toULong())
+				inverseOnSurface = Color(it.getLong("inverseOnSurface").toULong())
+				inverseSurface = Color(it.getLong("inverseSurface").toULong())
+				surfaceTint = Color(it.getLong("surfaceTint").toULong())
+				outlineVariant = Color(it.getLong("outlineVariant").toULong())
+				scrim = Color(it.getLong("scrim").toULong())
+				surfaceBright = Color(it.getLong("surfaceBright").toULong())
+				surfaceDim = Color(it.getLong("surfaceDim").toULong())
+				surfaceContainer = Color(it.getLong("surfaceContainer").toULong())
+				surfaceContainerLowest = Color(it.getLong("surfaceContainerLowest").toULong())
+				surfaceContainerLow = Color(it.getLong("surfaceContainerLow").toULong())
+				surfaceContainerHigh = Color(it.getLong("surfaceContainerHigh").toULong())
+				surfaceContainerHighest = Color(it.getLong("surfaceContainerHighest").toULong())
+			}
+		}
+	}
 }

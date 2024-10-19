@@ -72,6 +72,8 @@ import ir.mmd.androidDev.lowheanvar.ui.components.ConfirmDialog
 import ir.mmd.androidDev.lowheanvar.ui.components.ConfirmDialog.ConfirmResult
 import ir.mmd.androidDev.lowheanvar.ui.components.NewFolderDialog
 import ir.mmd.androidDev.lowheanvar.ui.components.NewFolderDialog.DialogResult
+import ir.mmd.androidDev.lowheanvar.ui.theme.AppSettings
+import ir.mmd.androidDev.lowheanvar.ui.theme.CustomTheme
 import ir.mmd.androidDev.lowheanvar.ui.theme.LowheAnvarTheme
 import ir.mmd.androidDev.lowheanvar.ui.theme.Typography
 import kotlinx.coroutines.launch
@@ -127,8 +129,16 @@ fun HomePage(navController: NavHostController) {
 						Text("$folderText$separator$noteText")
 					} else {
 						Box(contentAlignment = Alignment.Center) {
-							Icon(painterResource(R.drawable.lowh_e_anvar_border), null)
-							Icon(painterResource(R.drawable.lowh_e_anvar_text), null)
+							Icon(
+								painter = painterResource(R.drawable.lowh_e_anvar_border),
+								contentDescription = null,
+								tint = if (CustomTheme.useCustomTheme) CustomTheme.headerBorder else AppSettings.headerBorder
+							)
+							Icon(
+								painter = painterResource(R.drawable.lowh_e_anvar_text),
+								contentDescription = null,
+								tint = if (CustomTheme.useCustomTheme) CustomTheme.headerText else AppSettings.headerText
+							)
 						}
 					}
 				},

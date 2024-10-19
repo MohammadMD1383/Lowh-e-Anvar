@@ -1,5 +1,5 @@
 [versions]
-agp = "8.8.0-alpha06"
+agp = "8.8.0-alpha07"
 kotlin = "2.0.0"
 coreKtx = "1.13.1"
 junit = "4.13.2"
@@ -10,7 +10,6 @@ activityCompose = "1.9.3"
 composeBom = "2024.10.00"
 navigationCompose = "2.8.3"
 richeditorAndroid = "2.0.0"
-simpleXml = "2.7.1"
 colorpicker = "1.1.2"
 
 [libraries]
@@ -33,7 +32,6 @@ androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-man
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 richeditor-android = { module = "jp.wasabeef:richeditor-android", version.ref = "richeditorAndroid" }
-simple-xml = { module = "org.simpleframework:simple-xml", version.ref = "simpleXml" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

@@ -22,4 +22,7 @@
 	<string name="txt_settings">تنظیمات</string>
 	<string name="txt_theme">تم</string>
 	<string name="txt_pick_a_color">انتخاب رنگ</string>
+	<string name="txt_custom_theme">شخصی سازی تم</string>
+	<string name="txt_header_border">رنگ کادر تایپوگرافی</string>
+	<string name="txt_header_text">رنگ تایپوگرافی</string>
 </resources>

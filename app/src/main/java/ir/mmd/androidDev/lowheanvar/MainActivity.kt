@@ -38,7 +38,7 @@ private fun MainComponent() {
 	
 	NavHost(
 		navController = navController,
-		startDestination = "theme",
+		startDestination = "home",
 	) {
 		composable(
 			route = "home",

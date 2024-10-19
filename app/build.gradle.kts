@@ -43,7 +43,6 @@ dependencies {
 	implementation(kotlin("reflect"))
 	implementation(libs.compose.colorpicker)
 	implementation(libs.richeditor.android)
-	implementation(libs.simple.xml)
 	implementation(libs.androidx.material.icons.core)
 	implementation(libs.androidx.material.icons.extended)
 	implementation(libs.androidx.navigation.compose)
