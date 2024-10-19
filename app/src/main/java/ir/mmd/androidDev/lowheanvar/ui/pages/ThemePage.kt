@@ -107,7 +107,7 @@ fun ThemePage(navController: NavHostController) {
 							.fillMaxWidth()
 							.padding(horizontal = 16.dp)
 					) {
-						Text("Reset to Light Color Scheme")
+						Text(stringResource(R.string.txt_reset_light_scheme))
 					}
 				}
 				
@@ -118,7 +118,7 @@ fun ThemePage(navController: NavHostController) {
 							.fillMaxWidth()
 							.padding(horizontal = 16.dp)
 					) {
-						Text("Reset to Dark Color Scheme")
+						Text(stringResource(R.string.txt_reset_dark_scheme))
 					}
 				}
 			}

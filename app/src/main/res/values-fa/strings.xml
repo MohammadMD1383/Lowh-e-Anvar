@@ -28,4 +28,6 @@
 	<string name="txt_folder_name_empty">اسم پوشه نمی‌تواند خالی باشد</string>
 	<string name="txt_folder_name_slash_character">اسم پوشه نمی‌تواند شامل کاراکتر \'/\' باشد</string>
 	<string name="txt_duplicate_folder_name">پوشه دیگری با همین نام وجود دارد</string>
+	<string name="txt_reset_dark_scheme">بازنشانی به تم تیره پیشفرض</string>
+	<string name="txt_reset_light_scheme">بازنشانی به تم روشن پیشفرض</string>
 </resources>
