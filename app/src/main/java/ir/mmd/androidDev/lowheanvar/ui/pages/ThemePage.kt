@@ -19,14 +19,17 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -38,7 +41,7 @@ import ir.mmd.androidDev.lowheanvar.ui.theme.LowheAnvarTheme
 import ir.mmd.androidDev.lowheanvar.ui.theme.ThemeVariable
 import kotlinx.coroutines.launch
 import kotlin.reflect.KMutableProperty1
-import kotlin.reflect.full.memberProperties
+import kotlin.reflect.full.declaredMemberProperties
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -50,7 +53,7 @@ fun ThemePage(navController: NavHostController) {
 	Scaffold(
 		topBar = {
 			CenterAlignedTopAppBar(
-				title = { Text(stringResource(R.string.txt_theme)) },
+				title = { Text(stringResource(R.string.txt_custom_theme)) },
 				navigationIcon = {
 					IconButton(onClick = { navController.popBackStack() }) {
 						Icon(Icons.AutoMirrored.Rounded.ArrowBack, null)
@@ -67,30 +70,32 @@ fun ThemePage(navController: NavHostController) {
 			)
 		}
 	) { contentPadding ->
-		LazyColumn(modifier = Modifier.padding(contentPadding)) {
-			items(CustomTheme::class.memberProperties.filter { it.annotations.any { a -> a is ThemeVariable } }) {
-				val color = it.get(CustomTheme) as Color
-				Row(
-					verticalAlignment = Alignment.CenterVertically,
-					modifier = Modifier
-						.clickable {
-							scope.launch {
-								val result = colorPickerDialog.show(color)
-								if (result is ColorResult.OK) {
-									(it as KMutableProperty1<CustomTheme, Color>).set(CustomTheme, result.color)
+		CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+			LazyColumn(modifier = Modifier.padding(contentPadding)) {
+				items(CustomTheme::class.declaredMemberProperties.filter { it.annotations.any { a -> a is ThemeVariable } }) {
+					val color = it.get(CustomTheme) as Color
+					Row(
+						verticalAlignment = Alignment.CenterVertically,
+						modifier = Modifier
+							.clickable {
+								scope.launch {
+									val result = colorPickerDialog.show(color)
+									if (result is ColorResult.OK) {
+										(it as KMutableProperty1<CustomTheme, Color>).set(CustomTheme, result.color)
+									}
 								}
 							}
-						}
-						.padding(16.dp)
-				) {
-					Text(it.name, modifier = Modifier.weight(1f))
-					Box(
-						modifier = Modifier
-							.size(40.dp)
-							.clip(RoundedCornerShape(12.dp))
-							.background(color),
-						content = {}
-					)
+							.padding(16.dp)
+					) {
+						Text(it.name, modifier = Modifier.weight(1f))
+						Box(
+							modifier = Modifier
+								.size(40.dp)
+								.clip(RoundedCornerShape(12.dp))
+								.background(color),
+							content = {}
+						)
+					}
 				}
 			}
 		}
