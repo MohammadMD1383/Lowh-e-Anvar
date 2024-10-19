@@ -10,8 +10,8 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 
-private val DarkColorScheme = darkColorScheme()
-private val LightColorScheme = lightColorScheme()
+val DarkColorScheme = darkColorScheme()
+val LightColorScheme = lightColorScheme()
 
 @Composable
 fun LowheAnvarTheme(

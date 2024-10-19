@@ -15,118 +15,118 @@ data object CustomTheme {
 	var useCustomTheme by mutableStateOf(false)
 	
 	@ThemeVariable
-	var headerBorder by mutableStateOf(Color(0xFFFFFF00))
+	var headerBorder by mutableStateOf(Color.Yellow)
 	
 	@ThemeVariable
-	var headerText by mutableStateOf(Color(0xFFFFFFFF))
+	var headerText by mutableStateOf(Color.White)
 	
 	@ThemeVariable
-	var primary by mutableStateOf(Color(0xFF6750A4))
+	var primary by mutableStateOf(LightColorScheme.primary)
 	
 	@ThemeVariable
-	var onPrimary by mutableStateOf(Color(0xFFFFFFFF))
+	var onPrimary by mutableStateOf(LightColorScheme.onPrimary)
 	
 	@ThemeVariable
-	var primaryContainer by mutableStateOf(Color(0xFFEADDFF))
+	var primaryContainer by mutableStateOf(LightColorScheme.primaryContainer)
 	
 	@ThemeVariable
-	var onPrimaryContainer by mutableStateOf(Color(0xFF21005D))
+	var onPrimaryContainer by mutableStateOf(LightColorScheme.onPrimaryContainer)
 	
 	@ThemeVariable
-	var inversePrimary by mutableStateOf(Color(0xFFD0BCFF))
+	var inversePrimary by mutableStateOf(LightColorScheme.inversePrimary)
 	
 	@ThemeVariable
-	var secondary by mutableStateOf(Color(0xFF625B71))
+	var secondary by mutableStateOf(LightColorScheme.secondary)
 	
 	@ThemeVariable
-	var onSecondary by mutableStateOf(Color(0xFFFFFFFF))
+	var onSecondary by mutableStateOf(LightColorScheme.onSecondary)
 	
 	@ThemeVariable
-	var secondaryContainer by mutableStateOf(Color(0xFFE8DEF8))
+	var secondaryContainer by mutableStateOf(LightColorScheme.secondaryContainer)
 	
 	@ThemeVariable
-	var onSecondaryContainer by mutableStateOf(Color(0xFF1D192B))
+	var onSecondaryContainer by mutableStateOf(LightColorScheme.onSecondaryContainer)
 	
 	@ThemeVariable
-	var tertiary by mutableStateOf(Color(0xFF7D5260))
+	var tertiary by mutableStateOf(LightColorScheme.tertiary)
 	
 	@ThemeVariable
-	var onTertiary by mutableStateOf(Color(0xFFFFFFFF))
+	var onTertiary by mutableStateOf(LightColorScheme.onTertiary)
 	
 	@ThemeVariable
-	var tertiaryContainer by mutableStateOf(Color(0xFFFFD8E4))
+	var tertiaryContainer by mutableStateOf(LightColorScheme.tertiaryContainer)
 	
 	@ThemeVariable
-	var onTertiaryContainer by mutableStateOf(Color(0xFF31111D))
+	var onTertiaryContainer by mutableStateOf(LightColorScheme.onTertiaryContainer)
 	
 	@ThemeVariable
-	var error by mutableStateOf(Color(0xFFB3261E))
+	var error by mutableStateOf(LightColorScheme.error)
 	
 	@ThemeVariable
-	var onError by mutableStateOf(Color(0xFFFFFFFF))
+	var onError by mutableStateOf(LightColorScheme.onError)
 	
 	@ThemeVariable
-	var errorContainer by mutableStateOf(Color(0xFFF9DEDC))
+	var errorContainer by mutableStateOf(LightColorScheme.errorContainer)
 	
 	@ThemeVariable
-	var onErrorContainer by mutableStateOf(Color(0xFF410E0B))
+	var onErrorContainer by mutableStateOf(LightColorScheme.onErrorContainer)
 	
 	@ThemeVariable
-	var background by mutableStateOf(Color(0xFFFFFBFE))
+	var background by mutableStateOf(LightColorScheme.background)
 	
 	@ThemeVariable
-	var onBackground by mutableStateOf(Color(0xFF1C1B1F))
+	var onBackground by mutableStateOf(LightColorScheme.onBackground)
 	
 	@ThemeVariable
-	var surface by mutableStateOf(Color(0xFFFFFBFE))
+	var surface by mutableStateOf(LightColorScheme.surface)
 	
 	@ThemeVariable
-	var onSurface by mutableStateOf(Color(0xFF1C1B1F))
+	var onSurface by mutableStateOf(LightColorScheme.onSurface)
 	
 	@ThemeVariable
-	var surfaceVariant by mutableStateOf(Color(0xFFE7E0EC))
+	var surfaceVariant by mutableStateOf(LightColorScheme.surfaceVariant)
 	
 	@ThemeVariable
-	var onSurfaceVariant by mutableStateOf(Color(0xFF49454F))
+	var onSurfaceVariant by mutableStateOf(LightColorScheme.onSurfaceVariant)
 	
 	@ThemeVariable
-	var outline by mutableStateOf(Color(0xFF79747E))
+	var outline by mutableStateOf(LightColorScheme.outline)
 	
 	@ThemeVariable
-	var inverseOnSurface by mutableStateOf(Color(0xFFF4EFF4))
+	var inverseOnSurface by mutableStateOf(LightColorScheme.inverseOnSurface)
 	
 	@ThemeVariable
-	var inverseSurface by mutableStateOf(Color(0xFF313033))
+	var inverseSurface by mutableStateOf(LightColorScheme.inverseSurface)
 	
 	@ThemeVariable
-	var surfaceTint by mutableStateOf(Color(0xFF6750A4))
+	var surfaceTint by mutableStateOf(LightColorScheme.surfaceTint)
 	
 	@ThemeVariable
-	var outlineVariant by mutableStateOf(Color(0xFFCAC4D0))
+	var outlineVariant by mutableStateOf(LightColorScheme.outlineVariant)
 	
 	@ThemeVariable
-	var scrim by mutableStateOf(Color(0xFF000000))
+	var scrim by mutableStateOf(LightColorScheme.scrim)
 	
 	@ThemeVariable
-	var surfaceBright by mutableStateOf(Color(0xFFF4EFF4))
+	var surfaceBright by mutableStateOf(LightColorScheme.surfaceBright)
 	
 	@ThemeVariable
-	var surfaceDim by mutableStateOf(Color(0xFF1C1B1F))
+	var surfaceDim by mutableStateOf(LightColorScheme.surfaceDim)
 	
 	@ThemeVariable
-	var surfaceContainer by mutableStateOf(Color(0xFFF1E7FA))
+	var surfaceContainer by mutableStateOf(LightColorScheme.surfaceContainer)
 	
 	@ThemeVariable
-	var surfaceContainerLowest by mutableStateOf(Color(0xFFF1E7FA))
+	var surfaceContainerLowest by mutableStateOf(LightColorScheme.surfaceContainerLowest)
 	
 	@ThemeVariable
-	var surfaceContainerLow by mutableStateOf(Color(0xFFEADDFA))
+	var surfaceContainerLow by mutableStateOf(LightColorScheme.surfaceContainerLow)
 	
 	@ThemeVariable
-	var surfaceContainerHigh by mutableStateOf(Color(0xFFD0BCFF))
+	var surfaceContainerHigh by mutableStateOf(LightColorScheme.surfaceContainerHigh)
 	
 	@ThemeVariable
-	var surfaceContainerHighest by mutableStateOf(Color(0xFFD0BCFF))
+	var surfaceContainerHighest by mutableStateOf(LightColorScheme.surfaceContainerHighest)
 	
 	@get:Composable
 	val colorScheme: ColorScheme
@@ -168,6 +168,84 @@ data object CustomTheme {
 			surfaceContainerHigh = surfaceContainerHigh,
 			surfaceContainerHighest = surfaceContainerHighest,
 		)
+	
+	fun resetToLightColorScheme() {
+		primary = LightColorScheme.primary
+		onPrimary = LightColorScheme.onPrimary
+		primaryContainer = LightColorScheme.primaryContainer
+		onPrimaryContainer = LightColorScheme.onPrimaryContainer
+		inversePrimary = LightColorScheme.inversePrimary
+		secondary = LightColorScheme.secondary
+		onSecondary = LightColorScheme.onSecondary
+		secondaryContainer = LightColorScheme.secondaryContainer
+		onSecondaryContainer = LightColorScheme.onSecondaryContainer
+		tertiary = LightColorScheme.tertiary
+		onTertiary = LightColorScheme.onTertiary
+		tertiaryContainer = LightColorScheme.tertiaryContainer
+		onTertiaryContainer = LightColorScheme.onTertiaryContainer
+		error = LightColorScheme.error
+		onError = LightColorScheme.onError
+		errorContainer = LightColorScheme.errorContainer
+		onErrorContainer = LightColorScheme.onErrorContainer
+		background = LightColorScheme.background
+		onBackground = LightColorScheme.onBackground
+		surface = LightColorScheme.surface
+		onSurface = LightColorScheme.onSurface
+		surfaceVariant = LightColorScheme.surfaceVariant
+		onSurfaceVariant = LightColorScheme.onSurfaceVariant
+		outline = LightColorScheme.outline
+		inverseOnSurface = LightColorScheme.inverseOnSurface
+		inverseSurface = LightColorScheme.inverseSurface
+		surfaceTint = LightColorScheme.surfaceTint
+		outlineVariant = LightColorScheme.outlineVariant
+		scrim = LightColorScheme.scrim
+		surfaceBright = LightColorScheme.surfaceBright
+		surfaceDim = LightColorScheme.surfaceDim
+		surfaceContainer = LightColorScheme.surfaceContainer
+		surfaceContainerLowest = LightColorScheme.surfaceContainerLowest
+		surfaceContainerLow = LightColorScheme.surfaceContainerLow
+		surfaceContainerHigh = LightColorScheme.surfaceContainerHigh
+		surfaceContainerHighest = LightColorScheme.surfaceContainerHighest
+	}
+	
+	fun resetToDarkColorScheme() {
+		primary = DarkColorScheme.primary
+		onPrimary = DarkColorScheme.onPrimary
+		primaryContainer = DarkColorScheme.primaryContainer
+		onPrimaryContainer = DarkColorScheme.onPrimaryContainer
+		inversePrimary = DarkColorScheme.inversePrimary
+		secondary = DarkColorScheme.secondary
+		onSecondary = DarkColorScheme.onSecondary
+		secondaryContainer = DarkColorScheme.secondaryContainer
+		onSecondaryContainer = DarkColorScheme.onSecondaryContainer
+		tertiary = DarkColorScheme.tertiary
+		onTertiary = DarkColorScheme.onTertiary
+		tertiaryContainer = DarkColorScheme.tertiaryContainer
+		onTertiaryContainer = DarkColorScheme.onTertiaryContainer
+		error = DarkColorScheme.error
+		onError = DarkColorScheme.onError
+		errorContainer = DarkColorScheme.errorContainer
+		onErrorContainer = DarkColorScheme.onErrorContainer
+		background = DarkColorScheme.background
+		onBackground = DarkColorScheme.onBackground
+		surface = DarkColorScheme.surface
+		onSurface = DarkColorScheme.onSurface
+		surfaceVariant = DarkColorScheme.surfaceVariant
+		onSurfaceVariant = DarkColorScheme.onSurfaceVariant
+		outline = DarkColorScheme.outline
+		inverseOnSurface = DarkColorScheme.inverseOnSurface
+		inverseSurface = DarkColorScheme.inverseSurface
+		surfaceTint = DarkColorScheme.surfaceTint
+		outlineVariant = DarkColorScheme.outlineVariant
+		scrim = DarkColorScheme.scrim
+		surfaceBright = DarkColorScheme.surfaceBright
+		surfaceDim = DarkColorScheme.surfaceDim
+		surfaceContainer = DarkColorScheme.surfaceContainer
+		surfaceContainerLowest = DarkColorScheme.surfaceContainerLowest
+		surfaceContainerLow = DarkColorScheme.surfaceContainerLow
+		surfaceContainerHigh = DarkColorScheme.surfaceContainerHigh
+		surfaceContainerHighest = DarkColorScheme.surfaceContainerHighest
+	}
 	
 	fun save(context: Context) {
 		context.filesDir.resolve("CustomTheme.json").writeText(
