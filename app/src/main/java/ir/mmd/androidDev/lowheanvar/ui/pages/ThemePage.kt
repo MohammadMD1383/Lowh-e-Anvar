@@ -36,8 +36,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import ir.mmd.androidDev.lowheanvar.R
-import ir.mmd.androidDev.lowheanvar.ui.components.ColorPickerDialog
-import ir.mmd.androidDev.lowheanvar.ui.components.ColorPickerDialog.ColorResult
+import ir.mmd.androidDev.lowheanvar.ui.components.dialog.ColorPickerDialog
+import ir.mmd.androidDev.lowheanvar.ui.components.dialog.ColorPickerDialog.ColorResult
 import ir.mmd.androidDev.lowheanvar.ui.theme.CustomTheme
 import ir.mmd.androidDev.lowheanvar.ui.theme.LowheAnvarTheme
 import ir.mmd.androidDev.lowheanvar.ui.theme.ThemeVariable
@@ -75,13 +75,13 @@ fun ThemePage(navController: NavHostController) {
 		CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
 			LazyColumn(modifier = Modifier.padding(contentPadding)) {
 				items(CustomTheme::class.declaredMemberProperties.filter { it.annotations.any { a -> a is ThemeVariable } }) {
-					val color = it.get(CustomTheme) as Color
+					val currentColor = it.get(CustomTheme) as Color
 					Row(
 						verticalAlignment = Alignment.CenterVertically,
 						modifier = Modifier
 							.clickable {
 								scope.launch {
-									val result = colorPickerDialog.show(color)
+									val result = colorPickerDialog.show { color = currentColor }
 									if (result is ColorResult.OK) {
 										(it as KMutableProperty1<CustomTheme, Color>).set(CustomTheme, result.color)
 									}
@@ -94,7 +94,7 @@ fun ThemePage(navController: NavHostController) {
 							modifier = Modifier
 								.size(40.dp)
 								.clip(RoundedCornerShape(12.dp))
-								.background(color),
+								.background(currentColor),
 							content = {}
 						)
 					}

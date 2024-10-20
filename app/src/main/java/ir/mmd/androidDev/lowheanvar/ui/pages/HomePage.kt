@@ -69,10 +69,10 @@ import androidx.navigation.compose.rememberNavController
 import ir.mmd.androidDev.lowheanvar.ContentManager
 import ir.mmd.androidDev.lowheanvar.R
 import ir.mmd.androidDev.lowheanvar.navigateSingleTop
-import ir.mmd.androidDev.lowheanvar.ui.components.ConfirmDialog
-import ir.mmd.androidDev.lowheanvar.ui.components.ConfirmDialog.ConfirmResult
-import ir.mmd.androidDev.lowheanvar.ui.components.NewFolderDialog
-import ir.mmd.androidDev.lowheanvar.ui.components.NewFolderDialog.DialogResult
+import ir.mmd.androidDev.lowheanvar.ui.components.dialog.ConfirmDialog
+import ir.mmd.androidDev.lowheanvar.ui.components.dialog.ConfirmDialog.ConfirmResult
+import ir.mmd.androidDev.lowheanvar.ui.components.dialog.NewFolderDialog
+import ir.mmd.androidDev.lowheanvar.ui.components.dialog.NewFolderDialog.NewFolderResult
 import ir.mmd.androidDev.lowheanvar.ui.theme.AppSettings
 import ir.mmd.androidDev.lowheanvar.ui.theme.CustomTheme
 import ir.mmd.androidDev.lowheanvar.ui.theme.LowheAnvarTheme
@@ -88,13 +88,12 @@ fun HomePage(navController: NavHostController) {
 	val selectedFolders = remember { mutableStateMapOf<String, Boolean>() }
 	val selectedNotes = remember { mutableStateMapOf<String, Boolean>() }
 	val scope = rememberCoroutineScope()
-	var searchTerm by remember { mutableStateOf("") }
 	var popupShown by remember { mutableStateOf(false) }
 	var scale by remember { mutableStateOf(false) }
 	val scaleFactor by animateFloatAsState(if (scale) 1f else 0f, finishedListener = { if (it == 0f) popupShown = false })
 	val newFolderDialog = remember { NewFolderDialog() }
-	val confirmDialog = remember { ConfirmDialog() }
 	val context = LocalContext.current
+	val confirmDialog = remember { ConfirmDialog() }
 	
 	LaunchedEffect(folderSelectCount, noteSelectCount) {
 		if (folderSelectCount == 0 && noteSelectCount == 0) {
@@ -170,12 +169,12 @@ fun HomePage(navController: NavHostController) {
 						
 						IconButton(onClick = {
 							scope.launch {
-								val result = confirmDialog.show(
-									context.getString(R.string.txt_confirm_delete),
-									context.getString(R.string.txt_sure_to_delete)
-								)
+								val result = confirmDialog.show {
+									title = context.getString(R.string.txt_confirm_delete)
+									text = context.getString(R.string.txt_sure_to_delete)
+								}
 								
-								if (result is ConfirmResult.Ok) {
+								if (result is ConfirmResult.OK) {
 									selectMode = false
 									ContentManager.batchDelete(
 										selectedFolders.filterValues { it }.keys,
@@ -221,7 +220,7 @@ fun HomePage(navController: NavHostController) {
 								
 								scope.launch {
 									val result = newFolderDialog.show()
-									if (result is DialogResult.Create) {
+									if (result is NewFolderResult.Create) {
 										ContentManager.createFolder(result.name)
 									}
 								}

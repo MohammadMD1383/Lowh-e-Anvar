@@ -32,8 +32,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import ir.mmd.androidDev.lowheanvar.R
 import ir.mmd.androidDev.lowheanvar.navigateSingleTop
-import ir.mmd.androidDev.lowheanvar.ui.components.ColorPickerDialog
-import ir.mmd.androidDev.lowheanvar.ui.components.ColorPickerDialog.ColorResult
+import ir.mmd.androidDev.lowheanvar.ui.components.dialog.ColorPickerDialog
+import ir.mmd.androidDev.lowheanvar.ui.components.dialog.ColorPickerDialog.ColorResult
 import ir.mmd.androidDev.lowheanvar.ui.theme.AppSettings
 import ir.mmd.androidDev.lowheanvar.ui.theme.CustomTheme
 import ir.mmd.androidDev.lowheanvar.ui.theme.LowheAnvarTheme
@@ -88,7 +88,7 @@ fun SettingsPage(navController: NavHostController) {
 				modifier = Modifier
 					.clickable {
 						scope.launch {
-							val result = colorPickerDialog.show(AppSettings.headerBorder)
+							val result = colorPickerDialog.show { color = AppSettings.headerBorder }
 							if (result is ColorResult.OK) {
 								AppSettings.headerBorder = result.color
 								AppSettings.save(context)
@@ -112,7 +112,7 @@ fun SettingsPage(navController: NavHostController) {
 				modifier = Modifier
 					.clickable {
 						scope.launch {
-							val result = colorPickerDialog.show(AppSettings.headerText)
+							val result = colorPickerDialog.show { color = AppSettings.headerText }
 							if (result is ColorResult.OK) {
 								AppSettings.headerText = result.color
 								AppSettings.save(context)
