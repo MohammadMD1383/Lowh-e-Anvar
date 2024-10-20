@@ -15,6 +15,9 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -36,7 +39,7 @@ class ColorPickerDialog : BaseDialog<ColorPickerDialog, Color?, ColorPickerDialo
 		data class OK(val color: Color) : ColorResult
 	}
 	
-	var color: Color? = null
+	var color: Color? by mutableStateOf(null)
 	
 	override fun before() {
 		color = null
