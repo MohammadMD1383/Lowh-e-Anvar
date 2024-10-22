@@ -212,17 +212,15 @@ class ContentManagerClass(context: Context) {
 	}
 }
 
-sealed interface Item
-
-class Folder(val file: File) : Item {
-	val name get() = file.name
+class Folder(val file: File) {
+	val name: String get() = file.name
 }
 
-class Note(val file: File) : Item {
-	val title get() = file.name
+class Note(val file: File) {
+	val title: String get() = file.name
 	
-	var lastRead: Long = 0
-	var cachedContent: String = ""
+	private var lastRead: Long = 0
+	private var cachedContent: String = ""
 	var content: String
 		get() {
 			if (file.lastModified() > lastRead) {
