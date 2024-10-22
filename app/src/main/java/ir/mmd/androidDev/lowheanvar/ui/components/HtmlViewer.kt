@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.viewinterop.AndroidView
+import ir.mmd.androidDev.lowheanvar.ui.theme.AppSettings
 
 @OptIn(ExperimentalStdlibApi::class)
 @SuppressLint("SetJavaScriptEnabled")
@@ -28,7 +29,12 @@ fun HtmlViewer(
 			}).apply {
 				webViewClient = object : WebViewClient() {
 					override fun onPageFinished(view: WebView?, url: String?) {
-						evaluateJavascript("document.body.style.color='#${foregroundColor.toHexString().drop(2)}'", null)
+						evaluateJavascript(
+							"""
+							document.body.style.color='#${foregroundColor.toHexString().drop(2)}';
+							document.documentElement.style.fontSize='${AppSettings.editorFontSize}px';
+							""".trimMargin(), null
+						)
 					}
 				}
 				

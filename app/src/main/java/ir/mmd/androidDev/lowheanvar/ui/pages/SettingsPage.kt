@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
+import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.Remove
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -129,6 +131,26 @@ fun SettingsPage(navController: NavHostController) {
 						.background(AppSettings.headerText),
 					content = {}
 				)
+			}
+			
+			Row(
+				verticalAlignment = Alignment.CenterVertically,
+				modifier = Modifier.padding(16.dp)
+			) {
+				Text("Editor font size", modifier = Modifier.weight(1f))
+				IconButton(onClick = {
+					AppSettings.editorFontSize--
+					AppSettings.save(context)
+				}) {
+					Icon(Icons.Rounded.Remove, null)
+				}
+				Text(AppSettings.editorFontSize.toString())
+				IconButton(onClick = {
+					AppSettings.editorFontSize++
+					AppSettings.save(context)
+				}) {
+					Icon(Icons.Rounded.Add, null)
+				}
 			}
 		}
 		

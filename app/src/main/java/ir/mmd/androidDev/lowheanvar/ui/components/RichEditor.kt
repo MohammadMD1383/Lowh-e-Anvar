@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import ir.mmd.androidDev.lowheanvar.Notifier
 import ir.mmd.androidDev.lowheanvar.R
+import ir.mmd.androidDev.lowheanvar.ui.theme.AppSettings
 import ir.mmd.androidDev.lowheanvar.ui.theme.Typography
 import jp.wasabeef.richeditor.RichEditor
 
@@ -81,7 +82,7 @@ fun RichEditor(
 					setPlaceholder(context.getString(R.string.txt_start_typing_here))
 					setEditorBackgroundColor(backgroundColor)
 					setEditorFontColor(fontColor)
-					setEditorFontSize(fontSize)
+					setEditorFontSize(AppSettings.editorFontSize)
 					setEditorDirection(AppRichEditor.Direction.Auto)
 					setOnTextChangeListener(onTextChange)
 					html = text
