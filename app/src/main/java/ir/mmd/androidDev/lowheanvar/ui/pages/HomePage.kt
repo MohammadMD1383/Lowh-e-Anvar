@@ -73,11 +73,13 @@ import ir.mmd.androidDev.lowheanvar.ui.components.dialog.ConfirmDialog
 import ir.mmd.androidDev.lowheanvar.ui.components.dialog.ConfirmDialog.ConfirmResult
 import ir.mmd.androidDev.lowheanvar.ui.components.dialog.NewFolderDialog
 import ir.mmd.androidDev.lowheanvar.ui.components.dialog.NewFolderDialog.NewFolderResult
+import ir.mmd.androidDev.lowheanvar.ui.components.dialog.RenameItemDialog
 import ir.mmd.androidDev.lowheanvar.ui.theme.AppSettings
 import ir.mmd.androidDev.lowheanvar.ui.theme.CustomTheme
 import ir.mmd.androidDev.lowheanvar.ui.theme.LowheAnvarTheme
 import ir.mmd.androidDev.lowheanvar.ui.theme.Typography
 import kotlinx.coroutines.launch
+import java.io.File
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class, ExperimentalFoundationApi::class)
 @Composable
@@ -92,8 +94,9 @@ fun HomePage(navController: NavHostController) {
 	var scale by remember { mutableStateOf(false) }
 	val scaleFactor by animateFloatAsState(if (scale) 1f else 0f, finishedListener = { if (it == 0f) popupShown = false })
 	val newFolderDialog = remember { NewFolderDialog() }
-	val context = LocalContext.current
 	val confirmDialog = remember { ConfirmDialog() }
+	val renameDialog = remember { RenameItemDialog() }
+	val context = LocalContext.current
 	
 	LaunchedEffect(folderSelectCount, noteSelectCount) {
 		if (folderSelectCount == 0 && noteSelectCount == 0) {
@@ -162,7 +165,31 @@ fun HomePage(navController: NavHostController) {
 						}
 					} else {
 						if (folderSelectCount + noteSelectCount == 1) {
-							IconButton(onClick = {}) {
+							IconButton(onClick = {
+								scope.launch {
+									val isFolder = folderSelectCount > 0
+									val path: String
+									val name: String
+									(if (isFolder) selectedFolders.filterValues { it }.keys.first()
+									else selectedNotes.filterValues { it }.keys.first()).let {
+										path = it
+										name = it.substringAfterLast(File.separator)
+									}
+									
+									val result = renameDialog.show {
+										previousName = name
+										this.itemType = if (isFolder) RenameItemDialog.ItemType.Folder else RenameItemDialog.ItemType.Note
+									}
+									
+									if (result is RenameItemDialog.RenameResult.OK) {
+										selectMode = false
+										if (isFolder)
+											ContentManager.renameFolder(path, result.name)
+										else
+											ContentManager.renameNote(path, result.name)
+									}
+								}
+							}) {
 								Icon(Icons.Rounded.Edit, null)
 							}
 						}
@@ -350,6 +377,7 @@ fun HomePage(navController: NavHostController) {
 	
 	newFolderDialog()
 	confirmDialog()
+	renameDialog()
 }
 
 @Preview

@@ -160,6 +160,16 @@ class ContentManagerClass(context: Context) {
 		openNote = newNote
 	}
 	
+	fun renameNote(path: String, newName: String) {
+		val target = notes.find { it.file.path == path }!!
+		val file = target.file
+		val newFile = file.resolveSibling(newName)
+		file.renameTo(newFile)
+		
+		notes.remove(target)
+		notes.add(Note(newFile))
+	}
+	
 	fun deleteNote(note: Note) {
 		note.clearCache()
 		note.file.delete()
@@ -169,6 +179,16 @@ class ContentManagerClass(context: Context) {
 	fun deleteFolder(folder: Folder) {
 		folder.file.deleteRecursively()
 		folders.remove(folder)
+	}
+	
+	fun renameFolder(path: String, newName: String) {
+		val target = folders.find { it.file.path == path }!!
+		val file = target.file
+		val newFile = file.resolveSibling(newName)
+		file.renameTo(newFile)
+		
+		folders.remove(target)
+		folders.add(Folder(newFile))
 	}
 	
 	fun popStack(): Boolean {
