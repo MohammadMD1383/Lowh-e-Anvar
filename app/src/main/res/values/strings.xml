@@ -29,4 +29,5 @@
 	<string name="txt_duplicate_folder_name">Folder with this name already exists</string>
 	<string name="txt_reset_dark_scheme">Reset to Dark Color Scheme</string>
 	<string name="txt_reset_light_scheme">Reset to Light Color Scheme</string>
+	<string name="txt_editor_font_size">Editor font size</string>
 </resources>
