@@ -39,7 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import ir.mmd.androidDev.lowheanvar.Notifier
 import ir.mmd.androidDev.lowheanvar.R
-import ir.mmd.androidDev.lowheanvar.ui.theme.AppSettings
+import ir.mmd.androidDev.lowheanvar.AppSettings
 import ir.mmd.androidDev.lowheanvar.ui.theme.Typography
 import jp.wasabeef.richeditor.RichEditor
 

@@ -1,7 +1,6 @@
 package ir.mmd.androidDev.lowheanvar
 
 import android.app.Application
-import ir.mmd.androidDev.lowheanvar.ui.theme.AppSettings
 import ir.mmd.androidDev.lowheanvar.ui.theme.CustomTheme
 
 class App : Application() {

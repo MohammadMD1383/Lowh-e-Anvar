@@ -23,7 +23,7 @@ import ir.mmd.androidDev.lowheanvar.ui.components.ColorPreferenceSettingsItem
 import ir.mmd.androidDev.lowheanvar.ui.components.NumberPreferenceSettingsItem
 import ir.mmd.androidDev.lowheanvar.ui.components.SwitchSettingsItem
 import ir.mmd.androidDev.lowheanvar.ui.components.dialog.ColorPickerDialog
-import ir.mmd.androidDev.lowheanvar.ui.theme.AppSettings
+import ir.mmd.androidDev.lowheanvar.AppSettings
 import ir.mmd.androidDev.lowheanvar.ui.theme.CustomTheme
 import ir.mmd.androidDev.lowheanvar.ui.theme.LowheAnvarTheme
 

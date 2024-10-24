@@ -73,7 +73,7 @@ import ir.mmd.androidDev.lowheanvar.ui.components.dialog.ConfirmDialog.ConfirmRe
 import ir.mmd.androidDev.lowheanvar.ui.components.dialog.NewFolderDialog
 import ir.mmd.androidDev.lowheanvar.ui.components.dialog.NewFolderDialog.NewFolderResult
 import ir.mmd.androidDev.lowheanvar.ui.components.dialog.RenameItemDialog
-import ir.mmd.androidDev.lowheanvar.ui.theme.AppSettings
+import ir.mmd.androidDev.lowheanvar.AppSettings
 import ir.mmd.androidDev.lowheanvar.ui.theme.CustomTheme
 import ir.mmd.androidDev.lowheanvar.ui.theme.LowheAnvarTheme
 import ir.mmd.androidDev.lowheanvar.ui.theme.Typography
