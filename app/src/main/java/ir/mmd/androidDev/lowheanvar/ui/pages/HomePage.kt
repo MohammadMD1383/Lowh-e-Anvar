@@ -3,16 +3,9 @@ package ir.mmd.androidDev.lowheanvar.ui.pages
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
@@ -27,13 +20,9 @@ import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material.icons.rounded.FolderOpen
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.Settings
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Text
@@ -41,23 +30,16 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -68,26 +50,24 @@ import androidx.navigation.compose.rememberNavController
 import ir.mmd.androidDev.lowheanvar.ContentManager
 import ir.mmd.androidDev.lowheanvar.R
 import ir.mmd.androidDev.lowheanvar.navigateSingleTop
+import ir.mmd.androidDev.lowheanvar.ui.components.AppHeaderVector
+import ir.mmd.androidDev.lowheanvar.ui.components.FolderComponent
+import ir.mmd.androidDev.lowheanvar.ui.components.IconButton
+import ir.mmd.androidDev.lowheanvar.ui.components.NoteComponent
 import ir.mmd.androidDev.lowheanvar.ui.components.dialog.ConfirmDialog
 import ir.mmd.androidDev.lowheanvar.ui.components.dialog.ConfirmDialog.ConfirmResult
 import ir.mmd.androidDev.lowheanvar.ui.components.dialog.NewFolderDialog
 import ir.mmd.androidDev.lowheanvar.ui.components.dialog.NewFolderDialog.NewFolderResult
 import ir.mmd.androidDev.lowheanvar.ui.components.dialog.RenameItemDialog
-import ir.mmd.androidDev.lowheanvar.AppSettings
-import ir.mmd.androidDev.lowheanvar.ui.theme.CustomTheme
+import ir.mmd.androidDev.lowheanvar.ui.controllers.rememberSelectionController
 import ir.mmd.androidDev.lowheanvar.ui.theme.LowheAnvarTheme
-import ir.mmd.androidDev.lowheanvar.ui.theme.Typography
 import kotlinx.coroutines.launch
 import java.io.File
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun HomePage(navController: NavHostController) {
-	var folderSelectCount by remember { mutableIntStateOf(0) }
-	var noteSelectCount by remember { mutableIntStateOf(0) }
-	var selectMode by remember { mutableStateOf(false) }
-	val selectedFolders = remember { mutableStateMapOf<String, Boolean>() }
-	val selectedNotes = remember { mutableStateMapOf<String, Boolean>() }
+	val selectionController = rememberSelectionController()
 	val scope = rememberCoroutineScope()
 	var popupShown by remember { mutableStateOf(false) }
 	var scale by remember { mutableStateOf(false) }
@@ -97,24 +77,9 @@ fun HomePage(navController: NavHostController) {
 	val renameDialog = remember { RenameItemDialog() }
 	val context = LocalContext.current
 	
-	LaunchedEffect(folderSelectCount, noteSelectCount) {
-		if (folderSelectCount == 0 && noteSelectCount == 0) {
-			selectMode = false
-		}
-	}
-	
-	LaunchedEffect(selectMode) {
-		if (!selectMode) {
-			selectedFolders.clear()
-			selectedNotes.clear()
-			folderSelectCount = 0
-			noteSelectCount = 0
-		}
-	}
-	
-	BackHandler(ContentManager.canPopStack || selectMode) {
-		if (selectMode) {
-			selectMode = false
+	BackHandler(ContentManager.canPopStack || selectionController.selectMode) {
+		if (selectionController.selectMode) {
+			selectionController.clearSelection()
 		} else {
 			ContentManager.popStack()
 		}
@@ -124,56 +89,32 @@ fun HomePage(navController: NavHostController) {
 		topBar = {
 			TopAppBar(
 				title = {
-					if (selectMode) {
-						val folderText = if (folderSelectCount > 0) "$folderSelectCount ${stringResource(R.string.txt_folders)}" else ""
-						val noteText = if (noteSelectCount > 0) "$noteSelectCount ${stringResource(R.string.txt_notes)}" else ""
+					if (selectionController.selectMode) {
+						val folderText = if (selectionController.hasFolderSelection()) "${selectionController.foldersCount()} ${stringResource(R.string.txt_folders)}" else ""
+						val noteText = if (selectionController.hasNoteSelection()) "${selectionController.notesCount()} ${stringResource(R.string.txt_notes)}" else ""
 						val separator = if (folderText.isNotEmpty() && noteText.isNotEmpty()) "${stringResource(R.string.comma)} " else ""
 						Text("$folderText$separator$noteText")
 					} else {
-						Box(contentAlignment = Alignment.Center) {
-							Icon(
-								painter = painterResource(R.drawable.lowh_e_anvar_border),
-								contentDescription = null,
-								tint = if (CustomTheme.useCustomTheme) CustomTheme.headerBorder else AppSettings.headerBorder
-							)
-							Icon(
-								painter = painterResource(R.drawable.lowh_e_anvar_text),
-								contentDescription = null,
-								tint = if (CustomTheme.useCustomTheme) CustomTheme.headerText else AppSettings.headerText
-							)
-						}
+						AppHeaderVector()
 					}
 				},
 				navigationIcon = {
-					if (!selectMode) {
-						IconButton(onClick = {
-							navController.navigateSingleTop("settings")
-						}) {
-							Icon(Icons.Rounded.Settings, null)
-						}
-					} else {
-						IconButton(onClick = { selectMode = false }) {
-							Icon(Icons.Rounded.Close, null)
-						}
+					if (!selectionController.selectMode) IconButton(Icons.Rounded.Settings) {
+						navController.navigateSingleTop("settings")
+					} else IconButton(Icons.Rounded.Close) {
+						selectionController.clearSelection()
 					}
 				},
 				actions = {
-					if (!selectMode) {
-						IconButton(onClick = {}) {
-							Icon(Icons.Rounded.Search, null)
-						}
+					if (!selectionController.selectMode) {
+						IconButton(Icons.Rounded.Search) { }
 					} else {
-						if (folderSelectCount + noteSelectCount == 1) {
-							IconButton(onClick = {
+						if (selectionController.hasSingleSelection()) {
+							IconButton(Icons.Rounded.Edit) {
 								scope.launch {
-									val isFolder = folderSelectCount > 0
-									val path: String
-									val name: String
-									(if (isFolder) selectedFolders.filterValues { it }.keys.first()
-									else selectedNotes.filterValues { it }.keys.first()).let {
-										path = it
-										name = it.substringAfterLast(File.separator)
-									}
+									val isFolder = selectionController.hasFolderSelection()
+									val path = selectionController.singleSelectionKey()
+									val name = path.substringAfterLast(File.separator)
 									
 									val result = renameDialog.show {
 										previousName = name
@@ -181,19 +122,17 @@ fun HomePage(navController: NavHostController) {
 									}
 									
 									if (result is RenameItemDialog.RenameResult.OK) {
-										selectMode = false
+										selectionController.clearSelection()
 										if (isFolder)
 											ContentManager.renameFolder(path, result.name)
 										else
 											ContentManager.renameNote(path, result.name)
 									}
 								}
-							}) {
-								Icon(Icons.Rounded.Edit, null)
 							}
 						}
 						
-						IconButton(onClick = {
+						IconButton(Icons.Rounded.DeleteOutline) {
 							scope.launch {
 								val result = confirmDialog.show {
 									title = context.getString(R.string.txt_confirm_delete)
@@ -201,22 +140,20 @@ fun HomePage(navController: NavHostController) {
 								}
 								
 								if (result is ConfirmResult.OK) {
-									selectMode = false
+									selectionController.clearSelection()
 									ContentManager.batchDelete(
-										selectedFolders.filterValues { it }.keys,
-										selectedNotes.filterValues { it }.keys
+										selectionController.folderSelectionKeys(),
+										selectionController.noteSelectionKeys()
 									)
 								}
 							}
-						}) {
-							Icon(Icons.Rounded.DeleteOutline, null)
 						}
 					}
 				}
 			)
 		},
 		floatingActionButton = {
-			if (!selectMode) FloatingActionButton(onClick = {
+			if (!selectionController.selectMode) FloatingActionButton(onClick = {
 				if (popupShown) scale = false else popupShown = true
 			}) {
 				Icon(Icons.Rounded.Add, null)
@@ -271,104 +208,23 @@ fun HomePage(navController: NavHostController) {
 				horizontalArrangement = Arrangement.spacedBy(8.dp),
 				contentPadding = PaddingValues(start = 8.dp, top = 8.dp, end = 8.dp, bottom = 90.dp),
 			) {
-				items(ContentManager.folders, contentType = { "Folder" }) { folder ->
-					Card(
-						colors = CardDefaults.cardColors(containerColor = if (selectedFolders[folder.file.path] == true) MaterialTheme.colorScheme.primaryContainer else Color.Unspecified),
-						modifier = Modifier
-							.aspectRatio(1f)
-							.clip(CardDefaults.shape)
-							.combinedClickable(
-								onClick = {
-									if (selectMode) {
-										selectedFolders[folder.file.path] = (!(selectedFolders[folder.file.path] ?: false)).also {
-											if (it) folderSelectCount++ else folderSelectCount--
-										}
-									} else {
-										ContentManager.navigateTo(folder)
-									}
-								},
-								onLongClick = {
-									if (!selectMode) {
-										selectMode = true
-										selectedFolders[folder.file.path] = true
-										folderSelectCount++
-									} else {
-										selectedFolders[folder.file.path] = (!(selectedFolders[folder.file.path] ?: false)).also {
-											if (it) folderSelectCount++ else folderSelectCount--
-										}
-									}
-								}
-							)
-					) {
-						Box(
-							modifier = Modifier
-								.padding(8.dp)
-								.fillMaxSize(),
-							contentAlignment = Alignment.Center
-						) {
-							Text(
-								text = folder.name,
-								style = Typography.headlineMedium,
-								textAlign = TextAlign.Center,
-							)
-						}
-					}
+				items(ContentManager.folders, contentType = { "folder" }) { folder ->
+					FolderComponent(
+						selectionController = selectionController,
+						folder = folder
+					)
 				}
 				
 				items(
 					items = ContentManager.notes,
 					span = { GridItemSpan(2) },
-					contentType = { "Note" }
+					contentType = { "note" }
 				) { note ->
-					Card(
-						colors = CardDefaults.cardColors(containerColor = if (selectedNotes[note.file.path] == true) MaterialTheme.colorScheme.primaryContainer else Color.Unspecified),
-						modifier = Modifier
-							.clip(CardDefaults.shape)
-							.combinedClickable(
-								onClick = {
-									if (!selectMode) {
-										ContentManager.openNote = note
-										navController.navigateSingleTop("view")
-									} else {
-										selectedNotes[note.file.path] = (!(selectedNotes[note.file.path] ?: false)).also {
-											if (it) noteSelectCount++ else noteSelectCount--
-										}
-									}
-								},
-								onLongClick = {
-									if (!selectMode) {
-										selectMode = true
-										selectedNotes[note.file.path] = true
-										noteSelectCount++
-									} else {
-										selectedNotes[note.file.path] = (!(selectedNotes[note.file.path] ?: false)).also {
-											if (it) noteSelectCount++ else noteSelectCount--
-										}
-									}
-								}
-							)
-					) {
-						Column(
-							modifier = Modifier
-								.padding(16.dp)
-								.fillMaxWidth(),
-						) {
-							Text(
-								text = note.title,
-								style = Typography.headlineSmall,
-							)
-							
-							Spacer(Modifier.height(8.dp))
-							
-							Text(
-								text = note.content.replace("<[^>]*>".toRegex(), "").take(100),
-								style = Typography.bodyMedium,
-								maxLines = 1,
-								overflow = TextOverflow.Ellipsis,
-								modifier = Modifier.fillMaxWidth(0.7f)
-							)
-						}
-					}
+					NoteComponent(
+						navController = navController,
+						selectionController = selectionController,
+						note = note
+					)
 				}
 			}
 		}

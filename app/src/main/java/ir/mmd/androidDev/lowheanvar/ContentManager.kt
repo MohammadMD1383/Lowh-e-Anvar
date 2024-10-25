@@ -1,10 +1,9 @@
 package ir.mmd.androidDev.lowheanvar
 
 import android.content.Context
-import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
 import androidx.compose.material.icons.rounded.Home
@@ -51,31 +50,34 @@ class ContentManagerClass(context: Context) {
 		val arrow = rememberReusableComponent { Icon(Icons.AutoMirrored.Rounded.KeyboardArrowRight, null) }
 		val directories = currentPath.split(File.separator).toMutableList().apply { removeFirst() }
 		val last = directories.removeLastOrNull()
-		val scrollState = rememberScrollState()
+		val lazyListState = rememberLazyListState()
 		
-		LaunchedEffect(scrollState.maxValue) {
-			scrollState.animateScrollTo(scrollState.maxValue)
+		LaunchedEffect(currentPath) {
+			lazyListState.animateScrollToItem(lazyListState.layoutInfo.totalItemsCount - 1)
 		}
 		
-		Row(
+		LazyRow(
 			verticalAlignment = Alignment.CenterVertically,
-			modifier = Modifier
-				.fillMaxWidth()
-				.horizontalScroll(scrollState)
+			modifier = Modifier.fillMaxWidth(),
+			state = lazyListState
 		) {
-			IconButton(
-				enabled = last != null,
-				onClick = { navigateTo(contentRoot) }
-			) {
-				Icon(
-					imageVector = Icons.Rounded.Home,
-					contentDescription = null,
-					tint = if (last == null) MaterialTheme.colorScheme.primary else LocalContentColor.current
-				)
+			item(contentType = "home") {
+				IconButton(
+					enabled = last != null,
+					onClick = { navigateTo(contentRoot) }
+				) {
+					Icon(
+						imageVector = Icons.Rounded.Home,
+						contentDescription = null,
+						tint = if (last == null) MaterialTheme.colorScheme.primary else LocalContentColor.current
+					)
+				}
 			}
 			
 			if (last != null) {
-				arrow()
+				item(contentType = "arrow") {
+					arrow()
+				}
 			}
 			
 			var dirPath = contentRoot.path
@@ -83,22 +85,29 @@ class ContentManagerClass(context: Context) {
 				dirPath += "${File.separator}$it"
 				val capture = dirPath
 				
-				TextButton(
-					colors = ButtonDefaults.textButtonColors(contentColor = LocalContentColor.current),
-					onClick = { navigateTo(File(capture)) },
-				) {
-					Text(it)
+				item(contentType = "text-button") {
+					TextButton(
+						colors = ButtonDefaults.textButtonColors(contentColor = LocalContentColor.current),
+						onClick = { navigateTo(File(capture)) },
+					) {
+						Text(it)
+					}
 				}
-				arrow()
+				
+				item(contentType = "arrow") {
+					arrow()
+				}
 			}
 			
 			if (last != null) {
-				TextButton(
-					colors = ButtonDefaults.textButtonColors(disabledContentColor = ButtonDefaults.textButtonColors().contentColor),
-					onClick = {},
-					enabled = false
-				) {
-					Text(last)
+				item(contentType = "text-button") {
+					TextButton(
+						colors = ButtonDefaults.textButtonColors(disabledContentColor = ButtonDefaults.textButtonColors().contentColor),
+						onClick = {},
+						enabled = false
+					) {
+						Text(last)
+					}
 				}
 			}
 		}
@@ -153,21 +162,18 @@ class ContentManagerClass(context: Context) {
 		val newNote = Note(newFile)
 		openNote!!.file.renameTo(newFile)
 		newNote.content = newContent
-		
-		notes.remove(openNote!!)
-		notes.add(newNote)
-		
+		notes[notes.indexOf(openNote!!)] = newNote
 		openNote = newNote
 	}
 	
 	fun renameNote(path: String, newName: String) {
-		val target = notes.find { it.file.path == path }!!
+		val index = notes.indexOfFirst { it.file.path == path }
+		val target = notes[index]
 		val file = target.file
 		val newFile = file.resolveSibling(newName)
 		file.renameTo(newFile)
 		
-		notes.remove(target)
-		notes.add(Note(newFile))
+		notes[index] = Note(newFile)
 	}
 	
 	fun deleteNote(note: Note) {
@@ -182,13 +188,13 @@ class ContentManagerClass(context: Context) {
 	}
 	
 	fun renameFolder(path: String, newName: String) {
-		val target = folders.find { it.file.path == path }!!
+		val index = folders.indexOfFirst { it.file.path == path }
+		val target = folders[index]
 		val file = target.file
 		val newFile = file.resolveSibling(newName)
 		file.renameTo(newFile)
 		
-		folders.remove(target)
-		folders.add(Folder(newFile))
+		folders[index] = Folder(newFile)
 	}
 	
 	fun popStack(): Boolean {
@@ -202,7 +208,7 @@ class ContentManagerClass(context: Context) {
 		return false
 	}
 	
-	fun batchDelete(folderPaths: Set<String>, notePaths: Set<String>) {
+	fun batchDelete(folderPaths: List<String>, notePaths: List<String>) {
 		folders.filter { it.file.path in folderPaths }.forEach {
 			deleteFolder(it)
 		}
@@ -213,11 +219,13 @@ class ContentManagerClass(context: Context) {
 }
 
 class Folder(val file: File) {
-	val name: String get() = file.name
+	val name: String = file.name
+	val key: String = file.path
 }
 
 class Note(val file: File) {
-	val title: String get() = file.name
+	val title: String = file.name
+	val key: String = file.path
 	
 	private var lastRead: Long = 0
 	private var cachedContent: String = ""

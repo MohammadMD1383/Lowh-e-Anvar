@@ -46,9 +46,9 @@ class RenameItemDialog : BaseDialog<RenameItemDialog, String?, RenameItemDialog.
 		var problemText by remember { mutableStateOf("") }
 		val hasError by remember {
 			derivedStateOf {
-				name.isBlank().ifTrue { problemText = "Name cannot be empty" } or
-					name.contains('/').ifTrue { problemText = "Name cannot contain '/' character" } or
-					(name == previousName).ifTrue { problemText = "Name cannot be the same as the previous name" } or
+				name.isBlank().ifTrue { problemText = "Name cannot be empty" } ||
+					name.contains('/').ifTrue { problemText = "Name cannot contain '/' character" } ||
+					(name == previousName).ifTrue { problemText = "Name cannot be the same as the previous name" } ||
 					(if (itemType == ItemType.Folder) ContentManager.folders.any { it.name == name }
 					else itemType == ItemType.Note && ContentManager.notes.any { it.title == name })
 						.ifTrue { problemText = "An item with this name already exists" }
