@@ -28,6 +28,7 @@ import ir.mmd.androidDev.lowheanvar.ContentManager
 import ir.mmd.androidDev.lowheanvar.R
 import ir.mmd.androidDev.lowheanvar.navigateSingleTop
 import ir.mmd.androidDev.lowheanvar.ui.components.HtmlViewer
+import ir.mmd.androidDev.lowheanvar.ui.components.IconButton
 import ir.mmd.androidDev.lowheanvar.ui.theme.Typography
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -40,12 +41,8 @@ fun NoteViewPage(navController: NavController) {
 			CenterAlignedTopAppBar(
 				title = { Text(stringResource(R.string.txt_view_note)) },
 				navigationIcon = {
-					IconButton(
-						onClick = {
-							navController.popBackStack()
-						}
-					) {
-						Icon(Icons.AutoMirrored.Rounded.ArrowBack, null)
+					IconButton(Icons.AutoMirrored.Rounded.ArrowBack) {
+						navController.popBackStack()
 					}
 				},
 				actions = {
