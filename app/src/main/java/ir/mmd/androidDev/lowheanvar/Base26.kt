@@ -23,16 +23,12 @@ class Base26 {
 		private const val START_CHAR = 'a'
 		
 		fun fromInt(value: Int): String {
-			if (value == 0) {
-				return START_CHAR.toString()
-			}
-			
 			var num = value
 			val sb = StringBuilder()
-			while (num > 0) {
-				val remainder = (num - 1) % BASE
+			while (num >= 0) {
+				val remainder = num % BASE
 				sb.insert(0, (START_CHAR + remainder))
-				num = (num - 1) / BASE
+				num = (num / BASE) - 1
 			}
 			return sb.toString()
 		}
@@ -40,7 +36,7 @@ class Base26 {
 		fun toInt(value: String): Int {
 			var result = 0
 			for (char in value) {
-				result = result * BASE + (char - START_CHAR + 1)
+				result = result * BASE + (char - START_CHAR)
 			}
 			return result
 		}
