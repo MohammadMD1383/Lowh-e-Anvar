@@ -6,8 +6,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.DragHandle
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -20,10 +23,11 @@ import ir.mmd.androidDev.lowheanvar.Folder
 import ir.mmd.androidDev.lowheanvar.ui.controllers.SelectionController
 import ir.mmd.androidDev.lowheanvar.ui.theme.Typography
 import ir.mmd.androidDev.lowheanvar.ui.theme.dynamicCardColors
+import sh.calvin.reorderable.ReorderableCollectionItemScope
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun FolderComponent(
+fun ReorderableCollectionItemScope.FolderComponent(
 	selectionController: SelectionController,
 	folder: Folder
 ) {
@@ -54,6 +58,14 @@ fun FolderComponent(
 				.fillMaxSize(),
 			contentAlignment = Alignment.Center
 		) {
+			if (selectionController.selectMode) Icon(
+				imageVector = Icons.Rounded.DragHandle,
+				contentDescription = null,
+				modifier = Modifier
+					.align(Alignment.TopStart)
+					.draggableHandle()
+			)
+			
 			Text(
 				text = folder.name,
 				style = Typography.headlineMedium,

@@ -1,15 +1,16 @@
 package ir.mmd.androidDev.lowheanvar.ui.pages
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.DeleteOutline
@@ -43,11 +44,27 @@ import ir.mmd.androidDev.lowheanvar.ui.components.dialog.RenameItemDialog
 import ir.mmd.androidDev.lowheanvar.ui.controllers.rememberSelectionController
 import ir.mmd.androidDev.lowheanvar.ui.theme.LowheAnvarTheme
 import kotlinx.coroutines.launch
+import sh.calvin.reorderable.ReorderableItem
+import sh.calvin.reorderable.rememberReorderableLazyGridState
 import java.io.File
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomePage(navController: NavHostController) {
+	val lazyGridState = rememberLazyGridState()
+	val reorderableLazyGridState = rememberReorderableLazyGridState(lazyGridState) { from, to ->
+		if (from.contentType == "folder" && to.contentType == "folder") {
+			ContentManager.folders.add(to.index, ContentManager.folders.removeAt(from.index))
+		}
+		
+		if (from.contentType == "note" && to.contentType == "note") {
+			val foldersCount = ContentManager.folders.size
+			ContentManager.notes.add(
+				to.index - foldersCount,
+				ContentManager.notes.removeAt(from.index - foldersCount)
+			)
+		}
+	}
 	val selectionController = rememberSelectionController()
 	val scope = rememberCoroutineScope()
 	val newFolderDialog = remember { NewFolderDialog() }
@@ -130,7 +147,9 @@ fun HomePage(navController: NavHostController) {
 		}
 	) { contentPadding ->
 		Column(
-			modifier = Modifier.padding(contentPadding)
+			modifier = Modifier
+				.padding(contentPadding)
+				.fillMaxSize()
 		) {
 			ContentManager.BreadCrumb()
 			
@@ -139,24 +158,34 @@ fun HomePage(navController: NavHostController) {
 				verticalArrangement = Arrangement.spacedBy(8.dp),
 				horizontalArrangement = Arrangement.spacedBy(8.dp),
 				contentPadding = PaddingValues(start = 8.dp, top = 8.dp, end = 8.dp, bottom = 90.dp),
+				state = lazyGridState
 			) {
-				items(ContentManager.folders, contentType = { "folder" }) { folder ->
-					FolderComponent(
-						selectionController = selectionController,
-						folder = folder
-					)
+				items(
+					items = ContentManager.folders,
+					contentType = { "folder" },
+					key = { it.key }
+				) { folder ->
+					ReorderableItem(reorderableLazyGridState, folder.key) {
+						FolderComponent(
+							selectionController = selectionController,
+							folder = folder
+						)
+					}
 				}
 				
 				items(
 					items = ContentManager.notes,
 					span = { GridItemSpan(2) },
-					contentType = { "note" }
+					contentType = { "note" },
+					key = { it.key }
 				) { note ->
-					NoteComponent(
-						navController = navController,
-						selectionController = selectionController,
-						note = note
-					)
+					ReorderableItem(reorderableLazyGridState, note.key) {
+						NoteComponent(
+							navController = navController,
+							selectionController = selectionController,
+							note = note
+						)
+					}
 				}
 			}
 		}
