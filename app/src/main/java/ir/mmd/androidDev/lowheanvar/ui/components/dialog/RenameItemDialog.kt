@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import ir.mmd.androidDev.lowheanvar.ContentManager
 import ir.mmd.androidDev.lowheanvar.R
 import ir.mmd.androidDev.lowheanvar.ifTrue
+import ir.mmd.androidDev.lowheanvar.orderRegex
 import ir.mmd.androidDev.lowheanvar.ui.theme.Typography
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -48,9 +49,9 @@ class RenameItemDialog : BaseDialog<RenameItemDialog, String?, RenameItemDialog.
 			derivedStateOf {
 				name.isBlank().ifTrue { problemText = "Name cannot be empty" } ||
 					name.contains('/').ifTrue { problemText = "Name cannot contain '/' character" } ||
-					(name == previousName).ifTrue { problemText = "Name cannot be the same as the previous name" } ||
-					(if (itemType == ItemType.Folder) ContentManager.folders.any { it.name == name }
-					else itemType == ItemType.Note && ContentManager.notes.any { it.title == name })
+					(name == previousName.replace(orderRegex, "")).ifTrue { problemText = "Name cannot be the same as the previous name" } ||
+					(if (itemType == ItemType.Folder) ContentManager.folders.any { it.name.replace(orderRegex, "") == name }
+					else itemType == ItemType.Note && ContentManager.notes.any { it.title.replace(orderRegex, "") == name })
 						.ifTrue { problemText = "An item with this name already exists" }
 			}
 		}
@@ -60,7 +61,7 @@ class RenameItemDialog : BaseDialog<RenameItemDialog, String?, RenameItemDialog.
 				horizontalAlignment = Alignment.CenterHorizontally,
 				modifier = Modifier.padding(16.dp)
 			) {
-				Text("Renaming: $previousName", style = Typography.headlineSmall)
+				Text("Renaming: ${previousName.replace(orderRegex, "")}", style = Typography.headlineSmall)
 				
 				OutlinedTextField(
 					value = name,

@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import ir.mmd.androidDev.lowheanvar.ContentManager
 import ir.mmd.androidDev.lowheanvar.R
 import ir.mmd.androidDev.lowheanvar.ifTrue
+import ir.mmd.androidDev.lowheanvar.orderRegex
 import ir.mmd.androidDev.lowheanvar.ui.theme.Typography
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -43,7 +44,9 @@ class NewFolderDialog : BaseDialog<NewFolderDialog, String?, NewFolderDialog.New
 			derivedStateOf {
 				newFolderName.isBlank().ifTrue { problemText = context.getString(R.string.txt_folder_name_empty) }
 					|| newFolderName.contains('/').ifTrue { problemText = context.getString(R.string.txt_folder_name_slash_character) }
-					|| ContentManager.folders.any { it.name == newFolderName }.ifTrue { problemText = context.getString(R.string.txt_duplicate_folder_name) }
+					|| ContentManager.folders.any {
+					it.name.replace(orderRegex, "") == newFolderName
+				}.ifTrue { problemText = context.getString(R.string.txt_duplicate_folder_name) }
 			}
 		}
 		

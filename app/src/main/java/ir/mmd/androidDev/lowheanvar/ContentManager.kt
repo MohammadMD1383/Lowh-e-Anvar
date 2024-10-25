@@ -26,6 +26,7 @@ import ir.mmd.androidDev.lowheanvar.ui.components.rememberReusableComponent
 import java.io.File
 
 lateinit var ContentManager: ContentManagerClass
+val orderRegex = """^(([0-9]+?\.)|([a-z]+?\.))""".toRegex()
 
 class ContentManagerClass(context: Context) {
 	private val contentRoot = context.filesDir.resolve("content-root")
@@ -33,6 +34,8 @@ class ContentManagerClass(context: Context) {
 	private var currentPath by mutableStateOf("")
 	var folders = mutableStateListOf<Folder>()
 	var notes = mutableStateListOf<Note>()
+	var foldersOrderChanged = false
+	var notesOrderChanged = false
 	var openNote by mutableStateOf<Note?>(null)
 	var canPopStack by mutableStateOf(false)
 	var editNote = false
@@ -90,7 +93,7 @@ class ContentManagerClass(context: Context) {
 						colors = ButtonDefaults.textButtonColors(contentColor = LocalContentColor.current),
 						onClick = { navigateTo(File(capture)) },
 					) {
-						Text(it)
+						Text(it.replace(orderRegex, ""))
 					}
 				}
 				
@@ -106,7 +109,7 @@ class ContentManagerClass(context: Context) {
 						onClick = {},
 						enabled = false
 					) {
-						Text(last)
+						Text(last.replace(orderRegex, ""))
 					}
 				}
 			}
@@ -126,6 +129,9 @@ class ContentManagerClass(context: Context) {
 				notes.add(Note(it))
 			}
 		}
+		
+		folders.sortBy { it.order.value }
+		notes.sortBy { it.order.value }
 	}
 	
 	private fun navigateTo(file: File) {
@@ -158,7 +164,7 @@ class ContentManagerClass(context: Context) {
 	}
 	
 	fun editNote(newTitle: String, newContent: String) {
-		val newFile = openNote!!.file.resolveSibling(newTitle)
+		val newFile = openNote!!.file.resolveSibling(openNote!!.order.toString() + newTitle)
 		val newNote = Note(newFile)
 		openNote!!.file.renameTo(newFile)
 		newNote.content = newContent
@@ -170,7 +176,7 @@ class ContentManagerClass(context: Context) {
 		val index = notes.indexOfFirst { it.file.path == path }
 		val target = notes[index]
 		val file = target.file
-		val newFile = file.resolveSibling(newName)
+		val newFile = file.resolveSibling(target.order.toString() + newName)
 		file.renameTo(newFile)
 		
 		notes[index] = Note(newFile)
@@ -191,7 +197,7 @@ class ContentManagerClass(context: Context) {
 		val index = folders.indexOfFirst { it.file.path == path }
 		val target = folders[index]
 		val file = target.file
-		val newFile = file.resolveSibling(newName)
+		val newFile = file.resolveSibling(target.order.toString() + newName)
 		file.renameTo(newFile)
 		
 		folders[index] = Folder(newFile)
@@ -216,16 +222,120 @@ class ContentManagerClass(context: Context) {
 			deleteNote(it)
 		}
 	}
+	
+	private fun mergeOrders(o1: Order, o2: Order): Order {
+		return when (o1) {
+			is Order.Unordered -> o2
+			is Order.Numeric -> if (o2 is Order.Alphabetic) throw RuntimeException("This should never happen") else o1
+			is Order.Alphabetic -> if (o2 is Order.Numeric) throw RuntimeException("This should never happen") else o1
+		}
+	}
+	
+	private fun changeOrder(order: Order) = when (order) {
+		is Order.Unordered,
+		is Order.Alphabetic -> Order.Numeric()
+		
+		is Order.Numeric -> Order.Alphabetic()
+	}
+	
+	private fun saveFoldersOrder() {
+		val order = folders.fold<Folder, Order>(Order.Unordered) { order, folder ->
+			mergeOrders(order, folder.order)
+		}
+		var newOrder = changeOrder(order)
+		
+		val tmp = folders.map {
+			it.move(newOrder).also {
+				newOrder = newOrder.next()
+			}
+		}
+		folders.clear()
+		folders.addAll(tmp)
+	}
+	
+	private fun saveNotesOrder() {
+		val order = notes.fold<Note, Order>(Order.Unordered) { order, note ->
+			mergeOrders(order, note.order)
+		}
+		var newOrder = changeOrder(order)
+		
+		val tmp = notes.map {
+			it.move(newOrder).also {
+				newOrder = newOrder.next()
+			}
+		}
+		notes.clear()
+		notes.addAll(tmp)
+	}
+	
+	fun saveOrders() {
+		if (foldersOrderChanged) {
+			foldersOrderChanged = false
+			saveFoldersOrder()
+		}
+		if (notesOrderChanged) {
+			notesOrderChanged = false
+			saveNotesOrder()
+		}
+	}
+}
+
+sealed interface Order {
+	data class Alphabetic(val order: Base26 = Base26(0)) : Order {
+		override val value = order.toInt()
+		override fun next(): Alphabetic {
+			return Alphabetic(order.next())
+		}
+		
+		override fun toString() = "$order."
+	}
+	
+	data class Numeric(val order: Int = 0) : Order {
+		override val value = order
+		override fun next(): Order {
+			return Numeric(this.order + 1)
+		}
+		
+		override fun toString() = "$order."
+	}
+	
+	data object Unordered : Order {
+		override val value = 0
+		override fun next(): Order = throw UnsupportedOperationException("This should never happen")
+	}
+	
+	val value: Int
+	fun next(): Order
 }
 
 class Folder(val file: File) {
-	val name: String = file.name
+	var order: Order = Order.Unordered
 	val key: String = file.path
+	val name: String = file.name.replace(orderRegex) {
+		when {
+			it.groups[2] != null -> order = Order.Numeric(it.value.dropLast(1).toInt())
+			it.groups[3] != null -> order = Order.Alphabetic(it.value.dropLast(1).toBase26())
+		}
+		""
+	}
+	
+	fun move(newOrder: Order): Folder {
+		val newFile = file.resolveSibling(file.path.dropLastWhile { it != '/' } + newOrder + name)
+		file.renameTo(newFile)
+		return Folder(newFile)
+	}
 }
 
 class Note(val file: File) {
-	val title: String = file.name
+	var order: Order = Order.Unordered
 	val key: String = file.path
+	val title: String = file.name.replace(orderRegex) {
+		when {
+			it.groups[2] != null -> order = Order.Numeric(it.value.dropLast(1).toInt())
+			it.groups[3] != null -> order = Order.Alphabetic(it.value.dropLast(1).toBase26())
+		}
+		""
+	}
 	
 	private var lastRead: Long = 0
 	private var cachedContent: String = ""
@@ -246,5 +356,11 @@ class Note(val file: File) {
 	fun clearCache() {
 		cachedContent = ""
 		lastRead = 0
+	}
+	
+	fun move(newOrder: Order): Note {
+		val newFile = file.resolveSibling(file.path.dropLastWhile { it != '/' } + newOrder + title)
+		file.renameTo(newFile)
+		return Note(newFile)
 	}
 }

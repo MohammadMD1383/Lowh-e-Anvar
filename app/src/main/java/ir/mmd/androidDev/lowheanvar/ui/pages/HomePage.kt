@@ -21,6 +21,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -55,6 +56,7 @@ fun HomePage(navController: NavHostController) {
 	val reorderableLazyGridState = rememberReorderableLazyGridState(lazyGridState) { from, to ->
 		if (from.contentType == "folder" && to.contentType == "folder") {
 			ContentManager.folders.add(to.index, ContentManager.folders.removeAt(from.index))
+			ContentManager.foldersOrderChanged = true
 		}
 		
 		if (from.contentType == "note" && to.contentType == "note") {
@@ -63,6 +65,7 @@ fun HomePage(navController: NavHostController) {
 				to.index - foldersCount,
 				ContentManager.notes.removeAt(from.index - foldersCount)
 			)
+			ContentManager.notesOrderChanged = true
 		}
 	}
 	val selectionController = rememberSelectionController()
@@ -78,6 +81,11 @@ fun HomePage(navController: NavHostController) {
 		} else {
 			ContentManager.popStack()
 		}
+	}
+	
+	LaunchedEffect(selectionController.selectMode) {
+		if (!selectionController.selectMode)
+			ContentManager.saveOrders()
 	}
 	
 	Scaffold(
