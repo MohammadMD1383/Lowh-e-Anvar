@@ -6,12 +6,12 @@ plugins {
 
 android {
 	namespace = "ir.mmd.androidDev.lowheanvar"
-	compileSdk = 34
+	compileSdk = 35
 	
 	defaultConfig {
 		applicationId = "ir.mmd.androidDev.lowheanvar"
 		minSdk = 24
-		targetSdk = 34
+		targetSdk = 35
 		versionCode = 3
 		versionName = "0.3.0"
 		
@@ -41,6 +41,7 @@ android {
 
 dependencies {
 	implementation(kotlin("reflect"))
+	implementation(libs.reorderable)
 	implementation(libs.compose.colorpicker)
 	implementation(libs.richeditor.android)
 	implementation(libs.androidx.material.icons.core)

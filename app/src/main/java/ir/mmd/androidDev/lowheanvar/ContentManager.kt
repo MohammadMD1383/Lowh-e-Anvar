@@ -48,7 +48,7 @@ class ContentManagerClass(context: Context) {
 	@Composable
 	fun BreadCrumb() {
 		val arrow = rememberReusableComponent { Icon(Icons.AutoMirrored.Rounded.KeyboardArrowRight, null) }
-		val directories = currentPath.split(File.separator).toMutableList().apply { removeFirst() }
+		val directories = currentPath.split(File.separator).toMutableList().apply { removeAt(0) }
 		val last = directories.removeLastOrNull()
 		val lazyListState = rememberLazyListState()
 		
