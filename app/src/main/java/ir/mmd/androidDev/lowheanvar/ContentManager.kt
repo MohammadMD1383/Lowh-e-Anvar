@@ -23,7 +23,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import ir.mmd.androidDev.lowheanvar.ui.components.rememberReusableComponent
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import org.zeroturnaround.zip.ZipUtil
 import java.io.File
+import java.io.InputStream
+import java.io.OutputStream
 
 lateinit var ContentManager: ContentManagerClass
 val orderRegex = """^(([0-9]+?\.)|([a-z]+?\.))""".toRegex()
@@ -226,8 +231,8 @@ class ContentManagerClass(context: Context) {
 	private fun mergeOrders(o1: Order, o2: Order): Order {
 		return when (o1) {
 			is Order.Unordered -> o2
-			is Order.Numeric -> if (o2 is Order.Alphabetic) throw RuntimeException("This should never happen") else o1
-			is Order.Alphabetic -> if (o2 is Order.Numeric) throw RuntimeException("This should never happen") else o1
+			is Order.Numeric -> if (o2 is Order.Alphabetic) Order.Numeric(o2.value) else o1
+			is Order.Alphabetic -> if (o2 is Order.Numeric) Order.Alphabetic(Base26(o2.value)) else o1
 		}
 	}
 	
@@ -278,6 +283,15 @@ class ContentManagerClass(context: Context) {
 			saveNotesOrder()
 		}
 	}
+	
+	suspend fun backupContentsTo(stream: OutputStream) = withContext(Dispatchers.IO) {
+		ZipUtil.pack(contentRoot, stream)
+	}
+	
+	suspend fun restoreBackupFrom(stream: InputStream) = withContext(Dispatchers.IO) {
+		ZipUtil.unpack(stream, contentRoot)
+		update()
+	}
 }
 
 sealed interface Order {
@@ -302,6 +316,7 @@ sealed interface Order {
 	data object Unordered : Order {
 		override val value = 0
 		override fun next(): Order = throw UnsupportedOperationException("This should never happen")
+		override fun toString() = ""
 	}
 	
 	val value: Int

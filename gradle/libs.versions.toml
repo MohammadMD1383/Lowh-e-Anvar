@@ -1,17 +1,18 @@
 [versions]
-agp = "8.8.0-alpha07"
+agp = "8.8.0-alpha09"
 kotlin = "2.0.0"
-coreKtx = "1.13.1"
+coreKtx = "1.15.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
-lifecycleRuntimeKtx = "2.8.6"
+lifecycleRuntimeKtx = "2.8.7"
 activityCompose = "1.9.3"
-composeBom = "2024.10.00"
+composeBom = "2024.10.01"
 navigationCompose = "2.8.3"
 reorderable = "2.4.0"
 richeditorAndroid = "2.0.0"
 colorpicker = "1.1.2"
+ztZip = "1.17"
 
 [libraries]
 compose-colorpicker = { module = "com.github.skydoves:colorpicker-compose", version.ref = "colorpicker" }
@@ -34,6 +35,7 @@ androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 reorderable = { module = "sh.calvin.reorderable:reorderable", version.ref = "reorderable" }
 richeditor-android = { module = "jp.wasabeef:richeditor-android", version.ref = "richeditorAndroid" }
+zt-zip = { module = "org.zeroturnaround:zt-zip", version.ref = "ztZip" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

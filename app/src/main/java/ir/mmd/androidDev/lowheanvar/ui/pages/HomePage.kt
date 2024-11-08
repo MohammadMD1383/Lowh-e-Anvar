@@ -134,11 +134,11 @@ fun HomePage(navController: NavHostController) {
 								}
 								
 								if (result is ConfirmResult.OK) {
-									selectionController.clearSelection()
 									ContentManager.batchDelete(
 										selectionController.folderSelectionKeys(),
 										selectionController.noteSelectionKeys()
 									)
+									selectionController.clearSelection()
 								}
 							}
 						}

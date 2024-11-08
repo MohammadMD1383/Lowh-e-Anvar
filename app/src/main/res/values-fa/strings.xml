@@ -31,4 +31,7 @@
 	<string name="txt_reset_dark_scheme">بازنشانی به تم تیره پیشفرض</string>
 	<string name="txt_reset_light_scheme">بازنشانی به تم روشن پیشفرض</string>
 	<string name="txt_editor_font_size">سایز فونت ادیتور</string>
+	<string name="txt_backup_restore">پشتیبان‌گیری و بازنشانی</string>
+	<string name="txt_backup_data">پشتیبان‌گیری از داده‌ها</string>
+	<string name="txt_restore_data">بازنشانی داده‌ها</string>
 </resources>

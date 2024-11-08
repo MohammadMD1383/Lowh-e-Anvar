@@ -41,6 +41,7 @@ android {
 
 dependencies {
 	implementation(kotlin("reflect"))
+	implementation(libs.zt.zip)
 	implementation(libs.reorderable)
 	implementation(libs.compose.colorpicker)
 	implementation(libs.richeditor.android)

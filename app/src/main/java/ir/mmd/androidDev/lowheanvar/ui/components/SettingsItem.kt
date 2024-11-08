@@ -12,6 +12,8 @@ import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Remove
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
@@ -182,5 +184,17 @@ fun NumberPreferenceSettingsItem(
 				Icon(Icons.Rounded.Add, null)
 			}
 		}
+	)
+}
+
+@Composable
+fun SectionTitle(title: String) {
+	Text(
+		text = title,
+		color = LocalContentColor.current.copy(alpha = 0.5f),
+		style = MaterialTheme.typography.bodyMedium,
+		modifier = Modifier
+			.padding(horizontal = 16.dp)
+			.padding(bottom = 8.dp)
 	)
 }
